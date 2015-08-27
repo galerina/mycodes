@@ -1,0 +1,324 @@
+one	一
+two	二
+three	三
+four	四
+five	五
+six	六
+seven	七
+eight	八
+nine	九
+ten	十
+mouth	口
+rice　field	田
+eye	目
+old	古
+I	吾
+risk	冒
+companion	朋
+bright	明
+chant	唱
+sparkle	晶
+goods	品
+spine	呂
+prosperous	昌
+early	早
+rising sun	旭
+generation	世
+stomach	胃
+nightbreak	旦
+gall bladder	胆
+span	亘
+concave	凹
+convex	凸
+olden times	旧
+oneself	自
+white	白
+hundred	百
+in	中
+thousand	千
+tongue	舌
+measuring box	升
+rising up	昇
+round	丸
+measurement	寸
+specialty	専
+Dr.	博
+fortune telling	占
+above	上
+below	下
+eminent	卓
+morning	朝
+only	只
+shellfish	貝
+upright	貞
+pop song	唄
+derision	嘲
+elbow	肘
+employee	員
+see	見
+newborn babe	児
+beginning	元
+page	頁
+stubborn	頑
+mediocre	凡
+defeat	負
+ten thousand	万
+phrase	句
+texture	肌
+decameron	旬
+ladle	勺
+bull's eye	的
+neck	首
+fish guts	乙
+riot	乱
+straightaway	直
+tool	具
+true	真
+craft	工
+left	左
+right	右
+posses	有
+bribe	賄
+tribute	貢
+paragraph	項
+sword	刀
+blade	刃
+cut	切
+seduce	召
+shining	昭
+rule	則
+vice	副
+separate	別
+street	丁
+village	町
+can	可
+post a bill	貼
+curse	呪
+jealous	妬
+place on the head	頂
+child	子
+cavity	孔
+complete	了
+woman	女
+fond	好
+likeness	如
+mama	母
+pierce	貫
+older brother	兄
+overcome	克
+little	小
+few	少
+large	大
+many	多
+evening	夕
+eventide	汐
+outside	外
+name	名
+stone	石
+resemblance	肖
+nitrate	硝
+smash	砕
+sand	砂
+plane	削
+ray	光
+plump	太
+utensil	器
+stinking	臭
+exquisite	妙
+sniff	嗅
+focus	省
+thick	厚
+strange	奇
+stream	川
+state	州
+obey	順
+water	水
+icicle	氷
+eternity	永
+spring	泉
+meadow	原
+gland	腺
+petition	願
+swim	泳
+marsh	沼
+open sea	沖
+creek	江
+pan-	汎
+cleanse	汰
+soup	汁
+grains of sand	沙
+source	源
+lively	活
+extinguish	消
+but of course	況
+river	河
+overnight	泊
+lake	湖
+tide	潮
+fathom	測
+soil	土
+spit	吐
+pressure	圧
+cape	埼
+inlay	填
+hedge	垣
+squared jewel	圭
+seal	封
+horizon	涯
+Buddhist temple	寺
+time	時
+level	均
+fire	火
+inflammation	炎
+anxiety	煩
+thin	淡
+lamp	灯
+farm	畑
+disaster	災
+ashes	灰
+spot	点
+illuminate	照
+fish	魚
+fishing	漁
+ri	里
+black	黒
+black ink	墨
+carp	鯉
+quantity	量
+rin	厘
+bury	埋
+same	同
+den	洞
+trunk	胴
+yonder	向
+esteem	尚
+character	字
+guard	守
+perfect	完
+proclaim	宣
+wee hours	宵
+relax	安
+banquet	宴
+draw near	寄
+wealth	富
+savings	貯
+tree	木
+grove	林
+forest	森
+Japanese Judas tree	桂
+oak	柏
+frame	枠
+treetops	梢
+shelf	棚
+apricot	杏
+Pawlonia	桐
+plant	植
+wither	枯
+chair	椅
+crude	朴
+town	村
+inter-	相
+desk	机
+book	本
+tag	札
+calendar	暦&nbsp;
+plan	案
+parch	燥
+not yet	未
+extremity	末
+obscure	昧
+splash	沫
+flavor	味
+younger sister	妹
+vermilion	朱
+stock	株
+young	若
+grass	草
+suffering	苦
+bullying	苛
+tolerant	寛&nbsp;
+dilute	薄
+leaf	葉
+imitation	模
+vague	漠
+grave	墓
+livelihood	暮
+membrane	膜
+seedling	苗
+portent	兆
+peach tree	桃
+stare	眺
+dog	犬
+status quo	状
+silence	黙
+sort of thing	然
+reed	荻
+hunt	狩
+cat	猫
+cow	牛
+special	特
+revelation	告
+before	先
+wash	洗
+jammed in	介
+world	界
+tea	茶
+spinal column	脊
+fit	合
+pagoda	塔
+king	王
+treasure	宝
+jewel	玉
+pearl	珠
+present	現
+toy	玩
+lunatic	狂
+effulgent	旺
+emperor	皇
+display	呈
+whole	全
+plug	栓
+logic	理
+lord	主
+pour	注
+pillar	柱
+gold	金
+pig iron	銑
+bowl	鉢
+copper	銅
+angling	釣
+needle	針
+inscription	銘
+tranquilize	鎮
+road-way	道
+guidance	導
+crossing	辻
+swift	迅
+create	造
+urge	迫
+escape	逃
+environs	辺
+patrol	巡
+car	車
+take along	連
+rut	軌
+transport	輸
+metaphor	喩
+in front	前
+roast	煎
+each	各
+status	格
+graft	賂
+abbreviation	略
+guest	客
+forehead	額
+summer	夏
+dispose	処
+twig	条
+fall	落
+superfluous	冗
+Hades/pluto	冥
+army	軍
+radiance	輝
+carry	運
+crown	冠

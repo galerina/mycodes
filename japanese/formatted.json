@@ -1,0 +1,760 @@
+{
+    "data": [
+        {
+            "is_common": true,
+            "japanese": [
+                {
+                    "reading": "\u30c6\u30b9\u30c8"
+                }
+            ],
+            "senses": [
+                {
+                    "antonyms": [],
+                    "english_definitions": [
+                        "test"
+                    ],
+                    "info": [],
+                    "links": [],
+                    "parts_of_speech": [
+                        "Noun",
+                        "Suru verb"
+                    ],
+                    "restrictions": [],
+                    "see_also": [],
+                    "source": [],
+                    "tags": []
+                },
+                {
+                    "antonyms": [],
+                    "english_definitions": [
+                        "Test"
+                    ],
+                    "info": [],
+                    "links": [
+                        {
+                            "text": "Read \u201cTest\u201d on English Wikipedia",
+                            "url": "http://en.wikipedia.org/wiki/Test?oldid=489920455"
+                        },
+                        {
+                            "text": "Read \u201c\u30c6\u30b9\u30c8\u201d on Japanese Wikipedia",
+                            "url": "http://ja.wikipedia.org/wiki/\u30c6\u30b9\u30c8?oldid=41180564"
+                        }
+                    ],
+                    "parts_of_speech": [
+                        "Wikipedia definition"
+                    ],
+                    "restrictions": [],
+                    "see_also": [],
+                    "sentences": [],
+                    "source": [],
+                    "tags": []
+                }
+            ],
+            "tags": []
+        },
+        {
+            "is_common": true,
+            "japanese": [
+                {
+                    "reading": "\u3057\u3051\u3093",
+                    "word": "\u8a66\u9a13"
+                }
+            ],
+            "senses": [
+                {
+                    "antonyms": [],
+                    "english_definitions": [
+                        "examination",
+                        "test",
+                        "study",
+                        "trial",
+                        "experiment"
+                    ],
+                    "info": [],
+                    "links": [],
+                    "parts_of_speech": [
+                        "Noun",
+                        "Suru verb"
+                    ],
+                    "restrictions": [],
+                    "see_also": [],
+                    "source": [],
+                    "tags": []
+                }
+            ],
+            "tags": [
+                "wanikani18"
+            ]
+        },
+        {
+            "is_common": true,
+            "japanese": [
+                {
+                    "reading": "\u305f\u3081\u3057",
+                    "word": "\u8a66\u3057"
+                },
+                {
+                    "reading": "\u305f\u3081\u3057",
+                    "word": "\u9a13\u3057"
+                },
+                {
+                    "reading": "\u305f\u3081\u3057",
+                    "word": "\u9a13"
+                }
+            ],
+            "senses": [
+                {
+                    "antonyms": [],
+                    "english_definitions": [
+                        "trial",
+                        "test"
+                    ],
+                    "info": [],
+                    "links": [],
+                    "parts_of_speech": [
+                        "Noun"
+                    ],
+                    "restrictions": [],
+                    "see_also": [],
+                    "source": [],
+                    "tags": []
+                }
+            ],
+            "tags": []
+        },
+        {
+            "is_common": true,
+            "japanese": [
+                {
+                    "reading": "\u3057\u308c\u3093",
+                    "word": "\u8a66\u7df4"
+                },
+                {
+                    "reading": "\u3057\u308c\u3093",
+                    "word": "\u8a66\u7149"
+                },
+                {
+                    "reading": "\u3057\u308c\u3093",
+                    "word": "\u8a66\u932c"
+                }
+            ],
+            "senses": [
+                {
+                    "antonyms": [],
+                    "english_definitions": [
+                        "test",
+                        "trial",
+                        "probation",
+                        "ordeal",
+                        "tribulation"
+                    ],
+                    "info": [],
+                    "links": [],
+                    "parts_of_speech": [
+                        "Noun"
+                    ],
+                    "restrictions": [],
+                    "see_also": [],
+                    "source": [],
+                    "tags": []
+                }
+            ],
+            "tags": []
+        },
+        {
+            "is_common": true,
+            "japanese": [
+                {
+                    "reading": "\u305f\u3081\u3059",
+                    "word": "\u8a66\u3059"
+                },
+                {
+                    "reading": "\u305f\u3081\u3059",
+                    "word": "\u9a13\u3059"
+                }
+            ],
+            "senses": [
+                {
+                    "antonyms": [],
+                    "english_definitions": [
+                        "to attempt",
+                        "to test",
+                        "to try out"
+                    ],
+                    "info": [],
+                    "links": [],
+                    "parts_of_speech": [
+                        "Godan verb with su ending",
+                        "Transitive verb"
+                    ],
+                    "restrictions": [],
+                    "see_also": [],
+                    "source": [],
+                    "tags": []
+                }
+            ],
+            "tags": [
+                "wanikani18"
+            ]
+        },
+        {
+            "is_common": false,
+            "japanese": [
+                {
+                    "reading": "\u3053\u3046\u3057",
+                    "word": "\u8003\u8a66"
+                }
+            ],
+            "senses": [
+                {
+                    "antonyms": [],
+                    "english_definitions": [
+                        "test",
+                        "exam"
+                    ],
+                    "info": [],
+                    "links": [],
+                    "parts_of_speech": [
+                        "Noun"
+                    ],
+                    "restrictions": [],
+                    "see_also": [],
+                    "source": [],
+                    "tags": []
+                }
+            ],
+            "tags": []
+        },
+        {
+            "is_common": false,
+            "japanese": [
+                {
+                    "reading": "\u3057\u3058\u3087\u3046",
+                    "word": "\u8a66\u4e57"
+                }
+            ],
+            "senses": [
+                {
+                    "antonyms": [],
+                    "english_definitions": [
+                        "test drive",
+                        "test ride",
+                        "trial ride"
+                    ],
+                    "info": [],
+                    "links": [],
+                    "parts_of_speech": [
+                        "Noun",
+                        "Suru verb"
+                    ],
+                    "restrictions": [],
+                    "see_also": [],
+                    "source": [],
+                    "tags": []
+                }
+            ],
+            "tags": []
+        },
+        {
+            "is_common": true,
+            "japanese": [
+                {
+                    "reading": "\u3057\u304d\u3093\u305b\u304d",
+                    "word": "\u8a66\u91d1\u77f3"
+                }
+            ],
+            "senses": [
+                {
+                    "antonyms": [],
+                    "english_definitions": [
+                        "touchstone",
+                        "test case"
+                    ],
+                    "info": [],
+                    "links": [],
+                    "parts_of_speech": [
+                        "Noun"
+                    ],
+                    "restrictions": [],
+                    "see_also": [],
+                    "source": [],
+                    "tags": []
+                },
+                {
+                    "antonyms": [],
+                    "english_definitions": [
+                        "Touchstone (assaying tool)"
+                    ],
+                    "info": [],
+                    "links": [
+                        {
+                            "text": "Read \u201cTouchstone (assaying tool)\u201d on English Wikipedia",
+                            "url": "http://en.wikipedia.org/wiki/Touchstone_(assaying_tool)?oldid=492745731"
+                        },
+                        {
+                            "text": "Read \u201c\u8a66\u91d1\u77f3\u201d on Japanese Wikipedia",
+                            "url": "http://ja.wikipedia.org/wiki/\u8a66\u91d1\u77f3?oldid=42447176"
+                        }
+                    ],
+                    "parts_of_speech": [
+                        "Wikipedia definition"
+                    ],
+                    "restrictions": [],
+                    "see_also": [],
+                    "sentences": [],
+                    "source": [],
+                    "tags": []
+                }
+            ],
+            "tags": []
+        },
+        {
+            "is_common": true,
+            "japanese": [
+                {
+                    "reading": "\u304b\u304f\u3058\u3063\u3051\u3093",
+                    "word": "\u6838\u5b9f\u9a13"
+                }
+            ],
+            "senses": [
+                {
+                    "antonyms": [],
+                    "english_definitions": [
+                        "nuclear (bomb) test"
+                    ],
+                    "info": [],
+                    "links": [],
+                    "parts_of_speech": [
+                        "Noun"
+                    ],
+                    "restrictions": [],
+                    "see_also": [],
+                    "source": [],
+                    "tags": []
+                },
+                {
+                    "antonyms": [],
+                    "english_definitions": [
+                        "Nuclear weapons testing"
+                    ],
+                    "info": [],
+                    "links": [
+                        {
+                            "text": "Read \u201cNuclear weapons testing\u201d on English Wikipedia",
+                            "url": "http://en.wikipedia.org/wiki/Nuclear_weapons_testing?oldid=494925507"
+                        },
+                        {
+                            "text": "Read \u201c\u6838\u5b9f\u9a13\u201d on Japanese Wikipedia",
+                            "url": "http://ja.wikipedia.org/wiki/\u6838\u5b9f\u9a13?oldid=42601217"
+                        }
+                    ],
+                    "parts_of_speech": [
+                        "Wikipedia definition"
+                    ],
+                    "restrictions": [],
+                    "see_also": [],
+                    "sentences": [],
+                    "source": [],
+                    "tags": []
+                }
+            ],
+            "tags": []
+        },
+        {
+            "is_common": false,
+            "japanese": [
+                {
+                    "reading": "\u3057\u3051\u3093\u304b\u3093",
+                    "word": "\u8a66\u9a13\u7ba1"
+                }
+            ],
+            "senses": [
+                {
+                    "antonyms": [],
+                    "english_definitions": [
+                        "test tube"
+                    ],
+                    "info": [],
+                    "links": [],
+                    "parts_of_speech": [
+                        "Noun"
+                    ],
+                    "restrictions": [],
+                    "see_also": [],
+                    "source": [],
+                    "tags": []
+                },
+                {
+                    "antonyms": [],
+                    "english_definitions": [
+                        "Test tube"
+                    ],
+                    "info": [],
+                    "links": [
+                        {
+                            "text": "Read \u201cTest tube\u201d on English Wikipedia",
+                            "url": "http://en.wikipedia.org/wiki/Test_tube?oldid=493394952"
+                        },
+                        {
+                            "text": "Read \u201c\u8a66\u9a13\u7ba1\u201d on Japanese Wikipedia",
+                            "url": "http://ja.wikipedia.org/wiki/\u8a66\u9a13\u7ba1?oldid=42576641"
+                        }
+                    ],
+                    "parts_of_speech": [
+                        "Wikipedia definition"
+                    ],
+                    "restrictions": [],
+                    "see_also": [],
+                    "sentences": [],
+                    "source": [],
+                    "tags": []
+                }
+            ],
+            "tags": []
+        },
+        {
+            "is_common": false,
+            "japanese": [
+                {
+                    "reading": "\u3053\u3046\u3055",
+                    "word": "\u8003\u67fb"
+                }
+            ],
+            "senses": [
+                {
+                    "antonyms": [],
+                    "english_definitions": [
+                        "examination",
+                        "consideration",
+                        "test",
+                        "quiz"
+                    ],
+                    "info": [],
+                    "links": [],
+                    "parts_of_speech": [
+                        "Noun",
+                        "Suru verb"
+                    ],
+                    "restrictions": [],
+                    "see_also": [],
+                    "source": [],
+                    "tags": []
+                }
+            ],
+            "tags": []
+        },
+        {
+            "is_common": false,
+            "japanese": [
+                {
+                    "reading": "\u3057\u308a\u3087\u304f\u3051\u3093\u3055",
+                    "word": "\u8996\u529b\u691c\u67fb"
+                }
+            ],
+            "senses": [
+                {
+                    "antonyms": [],
+                    "english_definitions": [
+                        "eye test",
+                        "eyesight test"
+                    ],
+                    "info": [],
+                    "links": [],
+                    "parts_of_speech": [
+                        "Noun"
+                    ],
+                    "restrictions": [],
+                    "see_also": [],
+                    "source": [],
+                    "tags": []
+                }
+            ],
+            "tags": []
+        },
+        {
+            "is_common": false,
+            "japanese": [
+                {
+                    "reading": "\u3072\u3051\u3093\u3057\u3083",
+                    "word": "\u88ab\u9a13\u8005"
+                },
+                {
+                    "reading": "\u3072\u3051\u3093\u3057\u3083",
+                    "word": "\u88ab\u691c\u8005"
+                }
+            ],
+            "senses": [
+                {
+                    "antonyms": [],
+                    "english_definitions": [
+                        "subject (of a medical experiment, etc.)",
+                        "test subject",
+                        "trial subject",
+                        "testee"
+                    ],
+                    "info": [],
+                    "links": [],
+                    "parts_of_speech": [
+                        "Noun"
+                    ],
+                    "restrictions": [
+                        "\u88ab\u9a13\u8005"
+                    ],
+                    "see_also": [],
+                    "source": [],
+                    "tags": []
+                },
+                {
+                    "antonyms": [],
+                    "english_definitions": [
+                        "examinee (of a full-body scan, etc.)"
+                    ],
+                    "info": [],
+                    "links": [],
+                    "parts_of_speech": [],
+                    "restrictions": [],
+                    "see_also": [],
+                    "source": [],
+                    "tags": []
+                }
+            ],
+            "tags": []
+        },
+        {
+            "is_common": false,
+            "japanese": [
+                {
+                    "reading": "\u3057\u3046\u3093\u3066\u3093",
+                    "word": "\u8a66\u904b\u8ee2"
+                }
+            ],
+            "senses": [
+                {
+                    "antonyms": [],
+                    "english_definitions": [
+                        "trial run",
+                        "test run"
+                    ],
+                    "info": [],
+                    "links": [],
+                    "parts_of_speech": [
+                        "Noun",
+                        "Suru verb"
+                    ],
+                    "restrictions": [],
+                    "see_also": [],
+                    "source": [],
+                    "tags": []
+                }
+            ],
+            "tags": []
+        },
+        {
+            "is_common": false,
+            "japanese": [
+                {
+                    "reading": "\u3051\u3064\u3048\u304d\u3051\u3093\u3055",
+                    "word": "\u8840\u6db2\u691c\u67fb"
+                }
+            ],
+            "senses": [
+                {
+                    "antonyms": [],
+                    "english_definitions": [
+                        "blood test"
+                    ],
+                    "info": [],
+                    "links": [],
+                    "parts_of_speech": [
+                        "Noun"
+                    ],
+                    "restrictions": [],
+                    "see_also": [],
+                    "source": [],
+                    "tags": []
+                },
+                {
+                    "antonyms": [],
+                    "english_definitions": [
+                        "Blood test"
+                    ],
+                    "info": [],
+                    "links": [
+                        {
+                            "text": "Read \u201cBlood test\u201d on English Wikipedia",
+                            "url": "http://en.wikipedia.org/wiki/Blood_test?oldid=492057426"
+                        },
+                        {
+                            "text": "Read \u201c\u8840\u6db2\u691c\u67fb\u201d on Japanese Wikipedia",
+                            "url": "http://ja.wikipedia.org/wiki/\u8840\u6db2\u691c\u67fb?oldid=39281725"
+                        }
+                    ],
+                    "parts_of_speech": [
+                        "Wikipedia definition"
+                    ],
+                    "restrictions": [],
+                    "see_also": [],
+                    "sentences": [],
+                    "source": [],
+                    "tags": []
+                }
+            ],
+            "tags": []
+        },
+        {
+            "is_common": false,
+            "japanese": [
+                {
+                    "reading": "\u3057\u3051\u3093\u3053\u3046\u3066\u3044",
+                    "word": "\u8a66\u9a13\u5de5\u7a0b"
+                }
+            ],
+            "senses": [
+                {
+                    "antonyms": [],
+                    "english_definitions": [
+                        "test process",
+                        "test stage",
+                        "test period"
+                    ],
+                    "info": [],
+                    "links": [],
+                    "parts_of_speech": [
+                        "Noun"
+                    ],
+                    "restrictions": [],
+                    "see_also": [],
+                    "source": [],
+                    "tags": [
+                        "Computer terminology"
+                    ]
+                }
+            ],
+            "tags": []
+        },
+        {
+            "is_common": false,
+            "japanese": [
+                {
+                    "reading": "\u30c8\u30fc\u30d5\u30eb",
+                    "word": "\uff34\uff2f\uff25\uff26\uff2c"
+                },
+                {
+                    "reading": "\u30c8\u30d5\u30eb",
+                    "word": "\uff34\uff2f\uff25\uff26\uff2c"
+                },
+                {
+                    "reading": "\u30c8\u30c3\u30d5\u30eb",
+                    "word": "\uff34\uff2f\uff25\uff26\uff2c"
+                }
+            ],
+            "senses": [
+                {
+                    "antonyms": [],
+                    "english_definitions": [
+                        "Test of English as a Foreign Language",
+                        "TOEFL"
+                    ],
+                    "info": [],
+                    "links": [],
+                    "parts_of_speech": [
+                        "Noun"
+                    ],
+                    "restrictions": [],
+                    "see_also": [],
+                    "source": [],
+                    "tags": []
+                }
+            ],
+            "tags": []
+        },
+        {
+            "is_common": false,
+            "japanese": [
+                {
+                    "reading": "\u3057\u3051\u3093\u304b\u3093\u305f\u3066",
+                    "word": "\u8a66\u9a13\u7ba1\u7acb\u3066"
+                }
+            ],
+            "senses": [
+                {
+                    "antonyms": [],
+                    "english_definitions": [
+                        "test tube stand"
+                    ],
+                    "info": [],
+                    "links": [],
+                    "parts_of_speech": [
+                        "Noun"
+                    ],
+                    "restrictions": [],
+                    "see_also": [],
+                    "source": [],
+                    "tags": []
+                }
+            ],
+            "tags": []
+        },
+        {
+            "is_common": false,
+            "japanese": [
+                {
+                    "reading": "\u3059\u3044\u3057\u3064\u3051\u3093\u3055",
+                    "word": "\u6c34\u8cea\u691c\u67fb"
+                }
+            ],
+            "senses": [
+                {
+                    "antonyms": [],
+                    "english_definitions": [
+                        "water-quality test"
+                    ],
+                    "info": [],
+                    "links": [],
+                    "parts_of_speech": [
+                        "Noun"
+                    ],
+                    "restrictions": [],
+                    "see_also": [],
+                    "source": [],
+                    "tags": []
+                }
+            ],
+            "tags": []
+        },
+        {
+            "is_common": false,
+            "japanese": [
+                {
+                    "reading": "\u3057\u3087\u3046\u30c6\u30b9\u30c8",
+                    "word": "\u5c0f\u30c6\u30b9\u30c8"
+                }
+            ],
+            "senses": [
+                {
+                    "antonyms": [],
+                    "english_definitions": [
+                        "quiz",
+                        "short test",
+                        "mini test"
+                    ],
+                    "info": [],
+                    "links": [],
+                    "parts_of_speech": [
+                        "Noun"
+                    ],
+                    "restrictions": [],
+                    "see_also": [
+                        "\u30c6\u30b9\u30c8"
+                    ],
+                    "source": [],
+                    "tags": []
+                }
+            ],
+            "tags": []
+        }
+    ],
+    "meta": {
+        "status": 200
+    }
+}

@@ -1,0 +1,5 @@
+package misc
+
+type PrimeMap struct {
+	primes []bool
+}
