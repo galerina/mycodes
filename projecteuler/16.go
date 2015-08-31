@@ -7,17 +7,9 @@ package main
 import(
 	"fmt"
 	"math/big"
+	"misc"
 )
 
-func digitSum(n *big.Int) uint32 {
-	str := n.String()
-	var sum uint32 = 0
-	for i := range str {
-		sum += uint32(str[i] - '0')
-	}
-
-	return sum
-}
 
 func main() {
 	i := new(big.Int)
@@ -26,5 +18,5 @@ func main() {
 	i.SetString("1",10)
 	i.Lsh(i, 1000)
 
-	fmt.Println(digitSum(j))
+	fmt.Println(misc.DigitSum(i))
 }
