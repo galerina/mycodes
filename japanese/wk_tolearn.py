@@ -5,6 +5,7 @@ import sqlite3
 import os.path
 import json
 from urllib2 import Request, urlopen, URLError
+import collections
 
 anki_db_path = "%s/Documents/Anki/User 2/collection.anki2" % os.path.expanduser('~')
 
@@ -18,7 +19,7 @@ heisig_deck = next(deck for deck in decks.values() if deck["name"] == "heisig")
 
 c.execute("SELECT flds from notes where id in (SELECT nid from cards WHERE did = ?)", (heisig_deck["id"],))
 res = c.fetchall()
-heisig_kanji = [x[0].split(u'\x1f')[1] for x in res]
+anki_kanji = [x[0].split(u'\x1f')[1] for x in res]
 
 # Retrieve wani kani kanji
 
@@ -32,7 +33,23 @@ try:
 except URLError, e:
     print 'No kittez. Got an error code:', e
 
+# Read in all Heisig kanji so that we can print the Heisig number
+
+heisig_filename = "kanji.json"
+with open(heisig_filename) as heisig_file:
+    heisig_kanji = json.load(heisig_file)
+
+heisig_index_map = collections.defaultdict(int)
+
+for idx, kanji in enumerate(heisig_kanji):
+    heisig_index_map[kanji] = idx + 1
+
+new_kanji = []
 # Print wani kani kanji that haven't been added to Anki yet
 for kanji in wani_kani_kanji:
-    if not kanji in heisig_kanji:
-        print kanji
+    if not kanji in anki_kanji:
+        new_kanji.append(kanji)
+
+new_kanji.sort(key=lambda x: heisig_index_map[x])
+for kanji in new_kanji:
+    print heisig_index_map[kanji], ":", kanji
