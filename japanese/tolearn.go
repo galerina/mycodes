@@ -20,7 +20,8 @@ func pos(slice []string, value string) int {
 func main() {
 	unlearned := []string{}
 
-	for _, mnnCharacter := range japanese.MinnaKanji {
+	// for _, mnnCharacter := range japanese.MinnaKanji {
+	for _, mnnCharacter := range japanese.WaniKaniKanji {
 		learned := false;
 		for _,aCharacter := range japanese.AnkiKanji {
 			if aCharacter == mnnCharacter {
@@ -36,9 +37,11 @@ func main() {
 
 	fmt.Printf("%d unlearned kanji\n", len(unlearned))
 
+	count := 1
 	for hIdx, hCharacter := range japanese.HeisigKanji {
 		if pos(unlearned, hCharacter) != -1 {
-			fmt.Printf("%s: %d\n", hCharacter, hIdx+1)
+			fmt.Printf("%d:%s: %d\n", count, hCharacter, hIdx+1)
+			count++
 		}
 	}
 }

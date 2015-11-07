@@ -2,6 +2,8 @@ package misc
 
 import (
 	// "fmt"
+
+	"math/big"
 )
 
 func IsMultiple(n, base int) bool {
@@ -69,4 +71,37 @@ func GetTriangleNumberIterator() (func() int) {
 		return current
 	}
 
+}
+
+func DigitSum(n *big.Int) uint32 {
+	str := n.String()
+	var sum uint32 = 0
+	for i := range str {
+		sum += uint32(str[i] - '0')
+	}
+
+	return sum
+}
+
+
+// Return an array containing the proper divisors for each number less than n
+// Idea: could unite this and the "prime" functions
+func Divisors(n int) [][]int {
+	divisors := [][]int{}
+	
+	for i := 0; i < n; i++ {
+		divisors = append(divisors, []int{})
+	}
+
+	for i := 1; i < n; i++ {
+		multiple := i
+
+		for ; multiple < n; multiple = multiple + i {
+			if i < multiple {
+				divisors[multiple] = append(divisors[multiple],i)
+			}
+		}
+	}
+
+	return divisors
 }
