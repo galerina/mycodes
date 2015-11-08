@@ -23,7 +23,9 @@ anki_kanji = [x[0].split(u'\x1f')[1] for x in res]
 
 # Retrieve wani kani kanji
 
-kanji_api_url = "https://www.wanikani.com/api/user/04b0e939e046342d5a0c4dee70126067/kanji"
+# levels_string = ",".join([str(x) for x in range(1,61)])
+levels_string = "25"
+kanji_api_url = "https://www.wanikani.com/api/user/04b0e939e046342d5a0c4dee70126067/kanji/%s"%levels_string
 request = Request(kanji_api_url)
 
 try:
