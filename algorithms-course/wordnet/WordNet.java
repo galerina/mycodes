@@ -6,14 +6,13 @@ import edu.princeton.cs.algs4.DirectedCycle;
 
 import java.util.HashMap;
 import java.util.ArrayList;
-import java.lang.IllegalArgumentException;
 
 // This class represents the semantic "is-a" relationships between words using a DAG. An object
 // is initialized using a synset file (vertex information) and a hypernym file (edge information)
 // and then it allows for queries of the distance between two words through a common ancestor (aka
 // shortest ancestor path) and queries of closest common ancestor synset.
 public class WordNet {
-    static final boolean DEBUG = false;
+    private static final boolean DEBUG = false;
 
     private SAP sap;
     private HashMap<String, ArrayList<Integer>> wordToIdsMap;
@@ -35,7 +34,7 @@ public class WordNet {
             System.out.println(graph.toString());
         }
 
-	// Verify that the resulting graph is a rooted DAG
+        // Verify that the resulting graph is a rooted DAG
         DirectedCycle directedCycle = new DirectedCycle(graph);
         if (directedCycle.hasCycle() || !hasOneRoot(graph)) {
             throw new IllegalArgumentException();
@@ -72,7 +71,7 @@ public class WordNet {
 
 
     private void initializeWordMaps(String[] synsetLines) {
-        wordToIdsMap = new HashMap<String, ArrayList<Integer> >();
+        wordToIdsMap = new HashMap<String, ArrayList<Integer>>();
         idToSynsetMap = new HashMap<Integer, String>();
         for (String line : synsetLines) {
             String[] parts = line.split(",");
@@ -113,14 +112,14 @@ public class WordNet {
     // A "root" for this DAG has no outgoing edges. Return true if there is only
     // one such node.
     private boolean hasOneRoot(Digraph g) {
-	int rootsCount = 0;
-	for (int v = 0; v < g.V(); v++) {
-	    if (g.outdegree(v) == 0) {
-		rootsCount++;
-	    }
-	}
+        int rootsCount = 0;
+        for (int v = 0; v < g.V(); v++) {
+            if (g.outdegree(v) == 0) {
+                rootsCount++;
+            }
+        }
 
-	return rootsCount == 1;
+        return rootsCount == 1;
     }
 
 
