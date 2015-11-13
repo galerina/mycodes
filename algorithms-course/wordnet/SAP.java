@@ -22,7 +22,7 @@ public class SAP {
     private int sapLength;
     private int sapAncestor;
 
-    private final boolean DEBUG = true;
+    private final boolean DEBUG = false;
 
     // constructor takes a digraph (not necessarily a DAG)
     public SAP(Digraph G) {
@@ -114,7 +114,7 @@ public class SAP {
                 StdOut.printf("Step: Frontier distance %d\n", currentDistance);
                 StdOut.printf("Step: Queue size %d\n", q.size());
             }
-            while (distTo[q.peek()] == currentDistance) {
+            while (!q.isEmpty() && distTo[q.peek()] == currentDistance) {
                 int current = q.dequeue();
                 if (DEBUG) {
                     StdOut.printf("Exploring %d...\n", current);
@@ -164,7 +164,8 @@ public class SAP {
         // until we find the common ancestor or until both searches have terminated. Some
         // duplication but this version seemed to be the most readable.
         sapLength = Integer.MAX_VALUE;
-        while ((!searchFromV.isOver() || !searchFromW.isOver()) && searchFromV.height() < sapLength) {
+        while ((!searchFromV.isOver() && searchFromV.height() < sapLength) ||
+               (!searchFromW.isOver() && searchFromW.height() < sapLength)) {
              if (!searchFromV.isOver()) {
                 Iterable<Integer> frontier = searchFromV.frontier();
                 for (Integer f : frontier) {
