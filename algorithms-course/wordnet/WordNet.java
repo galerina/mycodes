@@ -18,7 +18,6 @@ public class WordNet {
     private HashMap<String, ArrayList<Integer>> wordToIdsMap;
     private HashMap<Integer, String> idToSynsetMap;
 
-
     // constructor takes the name of the two input files
     public WordNet(String synsets, String hypernyms) {
         In synsetIn = new In(synsets);
@@ -52,6 +51,9 @@ public class WordNet {
 
     // is the word a WordNet noun?
     public boolean isNoun(String word) {
+        if (word == null) {
+            throw new NullPointerException();
+        }
         return wordToIdsMap.get(word) != null;
     }
 
@@ -59,6 +61,13 @@ public class WordNet {
     // distance between nounA and nounB (the length of the shortest ancestor path
     // between the two words)
     public int distance(String nounA, String nounB) {
+        if (nounA == null || nounB == null) {
+            throw new NullPointerException();
+        }
+
+        if (!isNoun(nounA) || !isNoun(nounB)) {
+            throw new IllegalArgumentException();
+        }
         return sap.length(wordToIdsMap.get(nounA), wordToIdsMap.get(nounB));
     }
 
@@ -66,6 +75,13 @@ public class WordNet {
     // a synset (second field of synsets.txt) that is the common ancestor of nounA and nounB
     // in a shortest ancestral path
     public String sap(String nounA, String nounB) {
+        if (nounA == null || nounB == null) {
+            throw new NullPointerException();
+        }
+
+        if (!isNoun(nounA) || !isNoun(nounB)) {
+            throw new IllegalArgumentException();
+        }
         return idToSynsetMap.get(sap.ancestor(wordToIdsMap.get(nounA), wordToIdsMap.get(nounB)));
     }
 
