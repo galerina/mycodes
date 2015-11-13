@@ -102,6 +102,10 @@ public class SAP {
             return frontierArr;
         }
 
+        int height() {
+            return distTo[q.peek()];
+        }
+
         void step() {
             // Explore all nodes at the same distance from the origin.
             int currentDistance = distTo[q.peek()];
@@ -159,14 +163,17 @@ public class SAP {
         // Execute alternating steps for the breadth first searches starting from v and w
         // until we find the common ancestor or until both searches have terminated. Some
         // duplication but this version seemed to be the most readable.
-        while (!searchFromV.isOver() || !searchFromW.isOver()) {
-            if (!searchFromV.isOver()) {
+        sapLength = Integer.MAX_VALUE;
+        while ((!searchFromV.isOver() || !searchFromW.isOver()) && searchFromV.height() < sapLength) {
+             if (!searchFromV.isOver()) {
                 Iterable<Integer> frontier = searchFromV.frontier();
                 for (Integer f : frontier) {
                     if (searchFromW.isMarked(f)) {
-                        sapLength = searchFromV.distTo(f) + searchFromW.distTo(f);
-                        sapAncestor = f;
-                        return;
+                        int pathLength = searchFromV.distTo(f) + searchFromW.distTo(f);
+                        if (pathLength < sapLength) {
+                            sapLength = searchFromV.distTo(f) + searchFromW.distTo(f);
+                            sapAncestor = f;
+                        }
                     }
                 }
                 if (DEBUG) {
@@ -179,9 +186,11 @@ public class SAP {
                 Iterable<Integer> frontier = searchFromW.frontier();
                 for (Integer f : frontier) {
                     if (searchFromV.isMarked(f)) {
-                        sapLength = searchFromW.distTo(f) + searchFromV.distTo(f);
-                        sapAncestor = f;
-                        return;
+                        int pathLength = searchFromV.distTo(f) + searchFromW.distTo(f);
+                        if (pathLength < sapLength) {
+                            sapLength = searchFromV.distTo(f) + searchFromW.distTo(f);
+                            sapAncestor = f;
+                        }
                     }
                 }
                 if (DEBUG) {
@@ -191,9 +200,11 @@ public class SAP {
             }
         }
 
-        // We didn't find a common ancestor
-        sapLength = -1;
-        sapAncestor = -1;
+        if (sapLength == Integer.MAX_VALUE) {
+            // We didn't find a common ancestor
+            sapLength = -1;
+            sapAncestor = -1;
+        }
     }
 
 
