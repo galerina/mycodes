@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Arrays;
 
 public class SeamCarver {
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
 
     private enum Orientation {
         VERTICAL,
@@ -16,8 +16,8 @@ public class SeamCarver {
 
     private Color[][] image;
     private boolean isTransposed;
-    private int width;
-    private int height;
+    private int imageWidth;
+    private int imageHeight;
 
     // create a seam carver object based on the given picture
     public SeamCarver(Picture picture) {
@@ -31,11 +31,15 @@ public class SeamCarver {
                 image[i][j] = picture.get(j, i);
             }
         }
+
+        imageWidth = image[0].length;
+        imageHeight = image.length;
         isTransposed = false;
     }
 
     // current picture
     public Picture picture() {
+        setImageColumnsToOrientation(Orientation.VERTICAL);
         Picture pic = new Picture(width(), height());
         for (int i = 0; i < height(); i++) {
             for (int j = 0; j < width(); j++) {
@@ -48,21 +52,59 @@ public class SeamCarver {
 
     // width of current picture   
     public int width() {
-        return image[0].length;
+        if (isTransposed) {
+            return imageHeight;
+        } else {
+            return imageWidth;
+        }
     }
 
     // height of current picture
     public int height() {
-        return image.length;
+        if (isTransposed) {
+            return imageWidth;
+        } else {
+            return imageHeight;
+        }
     }
 
     // energy of pixel at col and row
     public double energy(int x, int y) {
-        if (x < 0 || x >= image[0].length || y < 0 || y >= image.length) {
+        if (x < 0 || x >= width() || y < 0 || y >= height()) {
             throw new IndexOutOfBoundsException();
         }
 
-        if (isBorderPixel(x, y)) {
+        if (isTransposed) {
+            return imageEnergy(y, x);
+        } else {
+            return imageEnergy(x, y);
+        }
+    }
+
+
+    // sequence of indices for horizontal seam
+    public int[] findHorizontalSeam() {
+        return findSeam(Orientation.HORIZONTAL);
+    }
+
+    // Find a sequence of indices for vertical seam
+    public int[] findVerticalSeam() {
+        return findSeam(Orientation.VERTICAL);
+    }
+
+    // remove horizontal seam from current picture
+    public void removeHorizontalSeam(int[] seam) {
+        removeSeam(seam, Orientation.HORIZONTAL);
+    }
+
+    // remove vertical seam from current picture
+    public void removeVerticalSeam(int[] seam) {
+        removeSeam(seam, Orientation.VERTICAL);
+    }
+
+
+    private double imageEnergy(int x, int y) {
+        if (isImageBorderPixel(x, y)) {
             return 1000;
         }
 
@@ -86,145 +128,47 @@ public class SeamCarver {
         return Math.sqrt((double)xGradientSquared + yGradientSquared);
     }
 
-    // sequence of indices for horizontal seam
-    public int[] findHorizontalSeam() {
-        transpose();
-
-        int[] seam = findVerticalSeam();
-
-        transpose();
-
-        return seam;
-    }
-
-    // Find a sequence of indices for vertical seam
-    // Algorithm:
-    // This problem maps onto the topological sort shortest path algorithm; the energy
-    // function determines the weight of the edges in the graph. We can create distTo
-    // and edgeTo arrays that are the same dimensions as the image. For every (i,j) there
-    // are directed edges to (i+1,j-1), (i+1,j), and (i+1,j+1) with weight equal toenergy(i,j).
-    // If we process pixels (nodes) in the order (1,1),(1,2),(1,3),...,(2,1),(2,2),(2,3)... then
-    // we will process nodes in a topological order. For an (i,j), set:
-    //   distTo[i][j] = min(distTo[i-1][j-1],distTo[i-1][j],distTo[i-1][j+1]) + energy(i,j)
-    //   edgeTo[i][j] = [j-1|j|j+1] where distTo[i-1][edgeTo[i][j]] is minimized
-    //
-    // Given these data structures we can reconstruct the least energy path by finding the minimum
-    // distTo column in the last row and using edgeTo to follow the path backward.
-    public int[] findVerticalSeam() {
-        if (DEBUG) {
-            printEnergy();
-        }
-
-        // Use Double instead of double so we can use Collections utility min()
-        Double[][] distTo = new Double[image.length][image[0].length];
-        int [][] edgeTo = new int[image.length][image[0].length];
-
-        // First row
-        int row = 0, col;
-        for (col = 0; col < image[row].length; col++) {
-            distTo[row][col] = energy(col, row);
-        }
-
-        // Other rows
-        for (row = 1; row < image.length; row++) {
-            // First column ineligible
-            distTo[row][0] = Double.MAX_VALUE;
-
-            for (col = 1; col < image[row].length - 1; col++) {
-                // Consider (row-1,col-1),(row-1,col),(row-1,col+1)
-                // and set distTo to the minimum energy path plus
-                // this node's energy.
-                double minValue = Double.MAX_VALUE;
-                int minIndex = -1;
-
-                for (int idx = col-1; idx <= col+1; idx++) {
-                    if (distTo[row-1][idx] < minValue) {
-                        minValue = distTo[row-1][idx];
-                        minIndex = idx;
-                    }
-                }
-
-                distTo[row][col] = minValue + energy(col, row);
-                edgeTo[row][col] = minIndex;
-            }
-
-            // Last column ineligible
-            distTo[row][image[row].length-1] = Double.MAX_VALUE;
-        }
-
-        int[] seamColIndices = new int[image.length];
-        int lastRow = image.length - 1;
-        List<Double> distToRow = Arrays.asList(distTo[lastRow]);
-        seamColIndices[lastRow] = distToRow.indexOf(Collections.min(distToRow));
-        for (row = lastRow-1; row >= 0; row--) {
-            seamColIndices[row] = edgeTo[row+1][seamColIndices[row+1]];
-        }
-
-        return seamColIndices;
-    }
-
-    // remove horizontal seam from current picture
-    public void removeHorizontalSeam(int[] seam) {
-        if (seam == null) {
-            throw new NullPointerException();
-        }
-
-        if (!isValidHorizontalSeam(seam)) {
-            throw new IllegalArgumentException();
-        }
-
-        transpose();
-        removeVerticalSeam(seam);
-        transpose();
-    }
-
-    // remove vertical seam from current picture
-    public void removeVerticalSeam(int[] seam) {
-        if (seam == null) {
-            throw new NullPointerException();
-        }
-
-        if (!isValidVerticalSeam(seam)) {
-            throw new IllegalArgumentException();
-        }
-
-        Color[][] newImage = new Color[image.length][image[0].length-1];
-        for (int i = 0; i < newImage.length; i++) {
-            System.arraycopy(image[i], 0, newImage[i], 0, seam[i]);
-            System.arraycopy(image[i], seam[i]+1, newImage[i], seam[i], newImage[i].length - seam[i]);
-        }
-
-        image = newImage;
-    }
-
-    private boolean isBorderPixel(int col, int row) {
-        return (col == 0) || (col == image[0].length - 1) ||
-            (row == 0) || (row == image.length - 1);
+    private boolean isImageBorderPixel(int col, int row) {
+        return (col == 0) || (col == imageWidth - 1) ||
+            (row == 0) || (row == imageHeight - 1);
     }
 
     // Transpose the image array. Creates a new array to copy into.
     private void transpose() {
-        Color[][] newImage = new Color[image[0].length][image.length];
+        if (DEBUG) {
+            StdOut.printf("transpose()\n");
+        }
 
-        for (int row = 0; row < image.length; row++) {
-            for (int col = 0; col < image[0].length; col++) {
+        Color[][] newImage = new Color[imageWidth][imageHeight];
+
+        for (int row = 0; row < imageHeight; row++) {
+            for (int col = 0; col < imageWidth; col++) {
                 newImage[col][row] = image[row][col];
             }
         }
 
         image = newImage;
+
+        // Swap internal imageHeight and imageWidth
+        int temp = imageHeight;
+        imageHeight = imageWidth;
+        imageWidth = temp;
+ 
         isTransposed = !isTransposed;
     }
 
-    private boolean isValidVerticalSeam(int[] seam) {
-        return isValidSeam(seam, image.length, image[0].length);
-    }
 
-    private boolean isValidHorizontalSeam(int[] seam) {
-        return isValidSeam(seam, image[0].length, image.length);
-    }
+    private boolean isValidSeam(int[] seam, Orientation orientation) {
+        int parallelDim, perpindicularDim;
+        if (orientation == Orientation.VERTICAL) {
+            parallelDim = height();
+            perpindicularDim = width();
+        } else {
+            assert orientation == Orientation.HORIZONTAL;
+            parallelDim = width();
+            perpindicularDim = height();
+        }
 
-    private boolean isValidSeam(int[] seam, int parallelDim, int perpindicularDim) {
         if (seam.length != parallelDim) {
             return false;
         }
@@ -250,14 +194,109 @@ public class SeamCarver {
         return true;
     }
 
+    // Find seam
+    // If finding a horizontal seam we transpose the array so the algorithm always goes 
+    // in row-column loop order.
+    // Algorithm:
+    // This problem maps onto the topological sort shortest path algorithm; the energy
+    // function determines the weight of the edges in the graph. We can create distTo
+    // and edgeTo arrays that are the same dimensions as the image. For every (i,j) there
+    // are directed edges to (i+1,j-1), (i+1,j), and (i+1,j+1) with weight equal toenergy(i,j).
+    // If we process pixels (nodes) in the order (1,1),(1,2),(1,3),...,(2,1),(2,2),(2,3)... then
+    // we will process nodes in a topological order. For an (i,j), set:
+    //   distTo[i][j] = min(distTo[i-1][j-1],distTo[i-1][j],distTo[i-1][j+1]) + energy(i,j)
+    //   edgeTo[i][j] = [j-1|j|j+1] where distTo[i-1][edgeTo[i][j]] is minimized
+    //
+    // Given these data structures we can reconstruct the least energy path by finding the minimum
+    // distTo column in the last row and using edgeTo to follow the path backward.
     private int[] findSeam(Orientation orientation) {
-        return null;
+        setImageColumnsToOrientation(orientation);
+
+        // Use Double instead of double so we can use Collections utility min()
+        Double[][] distTo = new Double[imageHeight][imageWidth];
+        int [][] edgeTo = new int[imageHeight][imageWidth];
+
+        // First row
+        int row = 0, col;
+        for (col = 0; col < imageWidth; col++) {
+            distTo[row][col] = imageEnergy(col, row);
+        }
+
+        // Other rows
+        for (row = 1; row < imageHeight; row++) {
+            // First column ineligible
+            distTo[row][0] = Double.MAX_VALUE;
+
+            for (col = 1; col < imageWidth - 1; col++) {
+                // Consider (row-1,col-1),(row-1,col),(row-1,col+1)
+                // and set distTo to the minimum energy path plus
+                // this node's energy.
+                double minValue = Double.MAX_VALUE;
+                int minIndex = -1;
+
+                for (int idx = col-1; idx <= col+1; idx++) {
+                    if (distTo[row-1][idx] < minValue) {
+                        minValue = distTo[row-1][idx];
+                        minIndex = idx;
+                    }
+                }
+
+                distTo[row][col] = minValue + imageEnergy(col, row);
+                edgeTo[row][col] = minIndex;
+            }
+
+            // Last column ineligible
+            distTo[row][imageWidth-1] = Double.MAX_VALUE;
+        }
+
+        int[] seamColIndices = new int[imageHeight];
+        int lastRow = imageHeight - 1;
+        List<Double> distToRow = Arrays.asList(distTo[lastRow]);
+        seamColIndices[lastRow] = distToRow.indexOf(Collections.min(distToRow));
+        for (row = lastRow-1; row >= 0; row--) {
+            seamColIndices[row] = edgeTo[row+1][seamColIndices[row+1]];
+        }
+
+        return seamColIndices;
     }
 
     private void removeSeam(int[] seam, Orientation orientation) {
+        if (seam == null) {
+            throw new NullPointerException();
+        }
+
+        if (!isValidSeam(seam, orientation)) {
+            throw new IllegalArgumentException();
+        }
+
+        setImageColumnsToOrientation(orientation);
+
+        int newImageWidth = imageWidth - 1;
+        for (int i = 0; i < imageHeight; i++) {
+            // Squeeze out the seam pixel
+            System.arraycopy(image[i], seam[i]+1, image[i], seam[i], newImageWidth - seam[i]);
+        }
+
+        imageWidth = newImageWidth;
+    }
+
+    // Is it worth it having two representations of the same thing?
+    //  ("isTransposed" and "image columns orientation")
+    private void setImageColumnsToOrientation(Orientation orientation) {
+        if (orientation == Orientation.VERTICAL) {
+            if (isTransposed) {
+                transpose();
+            }
+        } else {
+            assert orientation == Orientation.HORIZONTAL;
+            if (!isTransposed) {
+                transpose();
+            }
+        }
     }
 
     private void printEnergy() {
+        setImageColumnsToOrientation(Orientation.VERTICAL);
         StdOut.printf("\nENERGY:\n");
         for (int i = 0; i < image.length; i++) {
             for (int j = 0; j < image[0].length; j++) {
