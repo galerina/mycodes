@@ -7,14 +7,18 @@ import java.util.List;
 import java.util.Arrays;
 
 public class SeamCarver {
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
 
     private enum Orientation {
         VERTICAL,
         HORIZONTAL
     }
 
-    private Color[][] image;
+    private int[][] image;
+
+    private double[][] distTo;
+    private int [][] edgeTo;
+
     private boolean isTransposed;
     private int imageWidth;
     private int imageHeight;
@@ -25,16 +29,20 @@ public class SeamCarver {
             throw new NullPointerException();
         }
 
-        image = new Color[picture.height()][picture.width()];
+        image = new int[picture.height()][picture.width()];
         for (int i = 0; i < picture.height(); i++) {
             for (int j = 0; j < picture.width(); j++) {
-                image[i][j] = picture.get(j, i);
+                image[i][j] = picture.get(j, i).getRGB();
             }
         }
 
         imageWidth = image[0].length;
         imageHeight = image.length;
         isTransposed = false;
+
+        int maxDim = Math.max(imageHeight, imageWidth);
+        edgeTo = new int[maxDim][maxDim];
+        distTo = new double[maxDim][maxDim];
     }
 
     // current picture
@@ -43,7 +51,7 @@ public class SeamCarver {
         Picture pic = new Picture(width(), height());
         for (int i = 0; i < height(); i++) {
             for (int j = 0; j < width(); j++) {
-                pic.set(j, i, image[i][j]);
+                pic.set(j, i, new Color(image[i][j]));
             }
         }
 
@@ -108,20 +116,20 @@ public class SeamCarver {
             return 1000;
         }
 
-        Color xMinusOne = image[y][x-1];
-        Color xPlusOne = image[y][x+1];
-        Color yMinusOne = image[y-1][x];
-        Color yPlusOne = image[y+1][x];
+        int xMinusOne = image[y][x-1];
+        int xPlusOne = image[y][x+1];
+        int yMinusOne = image[y-1][x];
+        int yPlusOne = image[y+1][x];
 
-        int Rx = xMinusOne.getRed() - xPlusOne.getRed();
-        int Gx = xMinusOne.getGreen() - xPlusOne.getGreen();
-        int Bx = xMinusOne.getBlue() - xPlusOne.getBlue();
+        int Rx = getRed(xMinusOne) - getRed(xPlusOne);
+        int Gx = getGreen(xMinusOne) - getGreen(xPlusOne);
+        int Bx = getBlue(xMinusOne) - getBlue(xPlusOne);
 
         int xGradientSquared = Rx*Rx + Gx*Gx + Bx*Bx;
 
-        int Ry = yMinusOne.getRed() - yPlusOne.getRed();
-        int Gy = yMinusOne.getGreen() - yPlusOne.getGreen();
-        int By = yMinusOne.getBlue() - yPlusOne.getBlue();
+        int Ry = getRed(yMinusOne) - getRed(yPlusOne);
+        int Gy = getGreen(yMinusOne) - getGreen(yPlusOne);
+        int By = getBlue(yMinusOne) - getBlue(yPlusOne);
 
         int yGradientSquared = Ry*Ry + Gy*Gy + By*By;
 
@@ -135,11 +143,7 @@ public class SeamCarver {
 
     // Transpose the image array. Creates a new array to copy into.
     private void transpose() {
-        if (DEBUG) {
-            StdOut.printf("transpose()\n");
-        }
-
-        Color[][] newImage = new Color[imageWidth][imageHeight];
+        int[][] newImage = new int[imageWidth][imageHeight];
 
         for (int row = 0; row < imageHeight; row++) {
             for (int col = 0; col < imageWidth; col++) {
@@ -211,10 +215,7 @@ public class SeamCarver {
     // distTo column in the last row and using edgeTo to follow the path backward.
     private int[] findSeam(Orientation orientation) {
         setImageColumnsToOrientation(orientation);
-
-        // Use Double instead of double so we can use Collections utility min()
-        Double[][] distTo = new Double[imageHeight][imageWidth];
-        int [][] edgeTo = new int[imageHeight][imageWidth];
+        initDistTo();
 
         // First row
         int row = 0, col;
@@ -224,9 +225,7 @@ public class SeamCarver {
 
         // Other rows
         for (row = 1; row < imageHeight; row++) {
-            // First column ineligible
-            distTo[row][0] = Double.MAX_VALUE;
-
+            // First and last columns ineligible
             for (col = 1; col < imageWidth - 1; col++) {
                 // Consider (row-1,col-1),(row-1,col),(row-1,col+1)
                 // and set distTo to the minimum energy path plus
@@ -244,15 +243,12 @@ public class SeamCarver {
                 distTo[row][col] = minValue + imageEnergy(col, row);
                 edgeTo[row][col] = minIndex;
             }
-
-            // Last column ineligible
-            distTo[row][imageWidth-1] = Double.MAX_VALUE;
         }
 
         int[] seamColIndices = new int[imageHeight];
         int lastRow = imageHeight - 1;
-        List<Double> distToRow = Arrays.asList(distTo[lastRow]);
-        seamColIndices[lastRow] = distToRow.indexOf(Collections.min(distToRow));
+
+        seamColIndices[lastRow] = getIndexOfMin(distTo[lastRow], imageWidth);
         for (row = lastRow-1; row >= 0; row--) {
             seamColIndices[row] = edgeTo[row+1][seamColIndices[row+1]];
         }
@@ -295,23 +291,45 @@ public class SeamCarver {
         }
     }
 
-    private void printEnergy() {
-        setImageColumnsToOrientation(Orientation.VERTICAL);
-        StdOut.printf("\nENERGY:\n");
-        for (int i = 0; i < image.length; i++) {
-            for (int j = 0; j < image[0].length; j++) {
-                StdOut.printf("%7.2f ", energy(j, i));
+    private void initDistTo() {
+        for (int i = 0; i < distTo.length; i++) {
+            for (int j = 0; j < distTo[i].length; j++) {
+                distTo[i][j] = Double.MAX_VALUE;
             }
-            StdOut.println();
         }
     }
 
+    private int getRed(int x) {
+        return (x >> 16) & 0xff;
+    }
+
+    private int getGreen(int x) {
+        return (x >> 8) & 0xff;
+    }
+
+    private int getBlue(int x) {
+        return x & 0xff;
+    }
+
+    private int getIndexOfMin(double[] d, int length) {
+        int minIndex = -1;
+        double min = Double.MAX_VALUE;
+        for (int i = 0; i < length; i++) {
+            if (d[i] < min) {
+                minIndex = i;
+                min = d[i];
+            }
+        }
+
+        return minIndex;
+    }
+
     public static void main(String[] args) {
-        Picture picture = new Picture(10, 10);
-        SeamCarver seamCarver = new SeamCarver(picture);
+        // Picture picture = new Picture(10, 10);
+        // SeamCarver seamCarver = new SeamCarver(picture);
 
         // Test illegal argument exception behavior
-        int[] seam = { -1, 0, 1, 2, 3, 3, 3, 3, 3, 3 };
-        seamCarver.removeVerticalSeam(seam);
+        // int[] seam = { -1, 0, 1, 2, 3, 3, 3, 3, 3, 3 };
+        // seamCarver.removeVerticalSeam(seam);
     }
 }
