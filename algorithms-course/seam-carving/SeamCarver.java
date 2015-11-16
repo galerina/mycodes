@@ -7,12 +7,17 @@ import java.util.List;
 import java.util.Arrays;
 
 public class SeamCarver {
-    Color[][] image;
-    boolean isTransposed;
-    int width;
-    int height;
-
     private static final boolean DEBUG = false;
+
+    private enum Orientation {
+        VERTICAL,
+        HORIZONTAL
+    }
+
+    private Color[][] image;
+    private boolean isTransposed;
+    private int width;
+    private int height;
 
     // create a seam carver object based on the given picture
     public SeamCarver(Picture picture) {
@@ -23,7 +28,7 @@ public class SeamCarver {
         image = new Color[picture.height()][picture.width()];
         for (int i = 0; i < picture.height(); i++) {
             for (int j = 0; j < picture.width(); j++) {
-                image[i][j] = picture.get(j,i);
+                image[i][j] = picture.get(j, i);
             }
         }
         isTransposed = false;
@@ -34,7 +39,7 @@ public class SeamCarver {
         Picture pic = new Picture(width(), height());
         for (int i = 0; i < height(); i++) {
             for (int j = 0; j < width(); j++) {
-                pic.set(j,i,image[i][j]);
+                pic.set(j, i, image[i][j]);
             }
         }
 
@@ -117,7 +122,7 @@ public class SeamCarver {
         // First row
         int row = 0, col;
         for (col = 0; col < image[row].length; col++) {
-            distTo[row][col] = energy(col,row);
+            distTo[row][col] = energy(col, row);
         }
 
         // Other rows
@@ -139,7 +144,7 @@ public class SeamCarver {
                     }
                 }
 
-                distTo[row][col] = minValue + energy(col,row);
+                distTo[row][col] = minValue + energy(col, row);
                 edgeTo[row][col] = minIndex;
             }
 
@@ -197,7 +202,7 @@ public class SeamCarver {
             (row == 0) || (row == image.length - 1);
     }
 
-    // Transpose the image array
+    // Transpose the image array. Creates a new array to copy into.
     private void transpose() {
         Color[][] newImage = new Color[image[0].length][image.length];
 
@@ -224,6 +229,10 @@ public class SeamCarver {
             return false;
         }
 
+        if (seam[0] < 0 || seam[0] >= perpindicularDim) {
+            return false;
+        }
+
         int previousSeamValue = seam[0];
         for (int i = 1; i < seam.length; i++) {
             // Is seam "connected"?
@@ -241,13 +250,29 @@ public class SeamCarver {
         return true;
     }
 
+    private int[] findSeam(Orientation orientation) {
+        return null;
+    }
+
+    private void removeSeam(int[] seam, Orientation orientation) {
+    }
+
     private void printEnergy() {
         StdOut.printf("\nENERGY:\n");
         for (int i = 0; i < image.length; i++) {
             for (int j = 0; j < image[0].length; j++) {
-                StdOut.printf("%7.2f ", energy(j,i));
+                StdOut.printf("%7.2f ", energy(j, i));
             }
             StdOut.println();
         }
+    }
+
+    public static void main(String[] args) {
+        Picture picture = new Picture(10, 10);
+        SeamCarver seamCarver = new SeamCarver(picture);
+
+        // Test illegal argument exception behavior
+        int[] seam = { -1, 0, 1, 2, 3, 3, 3, 3, 3, 3 };
+        seamCarver.removeVerticalSeam(seam);
     }
 }
