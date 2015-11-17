@@ -1,11 +1,12 @@
 import edu.princeton.cs.algs4.Picture;
-import edu.princeton.cs.algs4.StdOut;
 
 import java.awt.Color;
-import java.util.Collections;
-import java.util.List;
-import java.util.Arrays;
 
+// SeamCarver is constructed with a Picture and has APIs for removing least-energy
+// seams from the image for resizing purposes. The public APIs always present the
+// image in the same orientation as it is originally but in the implementation of
+// the methods we sometimes transpose the internal image array. See the contrast
+// in the implementations of the public API energy() and the private helper imageEnergy().
 public class SeamCarver {
     private static final boolean DEBUG = false;
 
@@ -15,13 +16,13 @@ public class SeamCarver {
     }
 
     private int[][] image;
-
     private double[][] distTo;
     private int [][] edgeTo;
 
     private boolean isTransposed;
     private int imageWidth;
     private int imageHeight;
+
 
     // create a seam carver object based on the given picture
     public SeamCarver(Picture picture) {
@@ -47,6 +48,7 @@ public class SeamCarver {
         distTo = new double[2][maxDim];
     }
 
+
     // current picture
     public Picture picture() {
         setImageColumnsToOrientation(Orientation.VERTICAL);
@@ -60,6 +62,7 @@ public class SeamCarver {
         return pic;
     }
 
+
     // width of current picture   
     public int width() {
         if (isTransposed) {
@@ -69,6 +72,7 @@ public class SeamCarver {
         }
     }
 
+
     // height of current picture
     public int height() {
         if (isTransposed) {
@@ -77,6 +81,7 @@ public class SeamCarver {
             return imageHeight;
         }
     }
+
 
     // energy of pixel at col and row
     public double energy(int x, int y) {
@@ -97,22 +102,25 @@ public class SeamCarver {
         return findSeam(Orientation.HORIZONTAL);
     }
 
+
     // Find a sequence of indices for vertical seam
     public int[] findVerticalSeam() {
         return findSeam(Orientation.VERTICAL);
     }
+
 
     // remove horizontal seam from current picture
     public void removeHorizontalSeam(int[] seam) {
         removeSeam(seam, Orientation.HORIZONTAL);
     }
 
+
     // remove vertical seam from current picture
     public void removeVerticalSeam(int[] seam) {
         removeSeam(seam, Orientation.VERTICAL);
     }
 
-
+    
     private double imageEnergy(int x, int y) {
         if (isImageBorderPixel(x, y)) {
             return 1000;
@@ -143,7 +151,8 @@ public class SeamCarver {
             (row == 0) || (row == imageHeight - 1);
     }
 
-    // Transpose the image array. Creates a new array to copy into.
+    // Transpose the image array. Creates a new array to copy into. This is
+    // a little expensive so we do it as infrequently as possible.
     private void transpose() {
         int[][] newImage = new int[imageWidth][imageHeight];
 
@@ -200,21 +209,22 @@ public class SeamCarver {
         return true;
     }
 
+
     // Find seam
     // If finding a horizontal seam we transpose the array so the algorithm always goes 
-    // in row-column loop order.
+    // in row-then-column loop order.
     // Algorithm:
     // This problem maps onto the topological sort shortest path algorithm; the energy
-    // function determines the weight of the edges in the graph. We can create distTo
-    // and edgeTo arrays that are the same dimensions as the image. For every (i,j) there
-    // are directed edges to (i+1,j-1), (i+1,j), and (i+1,j+1) with weight equal toenergy(i,j).
-    // If we process pixels (nodes) in the order (1,1),(1,2),(1,3),...,(2,1),(2,2),(2,3)... then
+    // function determines the weight of the edges in the graph. For each (i,j) in the image
+    // there is a node in the graph which has directed edges to the nodes corresponding to
+    // (i+1,j-1), (i+1,j), and (i+1,j+1). Each of these 3 edges has weight equal to imageEnergy(i,j).
+    // If we process nodes in the order (1,1),(1,2),(1,3),...,(2,1),(2,2),(2,3)... then
     // we will process nodes in a topological order. For an (i,j), set:
     //   distTo[i][j] = min(distTo[i-1][j-1],distTo[i-1][j],distTo[i-1][j+1]) + energy(i,j)
     //   edgeTo[i][j] = [j-1|j|j+1] where distTo[i-1][edgeTo[i][j]] is minimized
     //
-    // Given these data structures we can reconstruct the least energy path by finding the minimum
-    // distTo column in the last row and using edgeTo to follow the path backward.
+    // Starting from the minimum index in the last calculation of distTo we can use the edgeTo
+    // data structure to construct the least energy path (seam).
     private int[] findSeam(Orientation orientation) {
         setImageColumnsToOrientation(orientation);
         initDistTo();
@@ -267,6 +277,7 @@ public class SeamCarver {
         return seamColIndices;
     }
 
+
     private void removeSeam(int[] seam, Orientation orientation) {
         if (seam == null) {
             throw new NullPointerException();
@@ -287,6 +298,7 @@ public class SeamCarver {
         imageWidth = newImageWidth;
     }
 
+
     // Is it worth it having two representations of the same thing?
     //  ("isTransposed" and "image columns orientation")
     private void setImageColumnsToOrientation(Orientation orientation) {
@@ -302,6 +314,7 @@ public class SeamCarver {
         }
     }
 
+
     private void initDistTo() {
         for (int i = 0; i < distTo.length; i++) {
             for (int j = 0; j < distTo[i].length; j++) {
@@ -310,18 +323,23 @@ public class SeamCarver {
         }
     }
 
+
     private int getRed(int x) {
         return (x >> 16) & 0xff;
     }
+
 
     private int getGreen(int x) {
         return (x >> 8) & 0xff;
     }
 
+
     private int getBlue(int x) {
         return x & 0xff;
     }
 
+
+    // Return the index of the minimum element in d from indices 0 to length-1
     private int getIndexOfMin(double[] d, int length) {
         int minIndex = 0;
         double min = Double.MAX_VALUE;
@@ -336,7 +354,7 @@ public class SeamCarver {
     }
 
     public static void main(String[] args) {
-        Picture picture = new Picture(8,1);
+        Picture picture = new Picture(8, 1);
 
         SeamCarver seamCarver = new SeamCarver(picture);
         seamCarver.findHorizontalSeam();
