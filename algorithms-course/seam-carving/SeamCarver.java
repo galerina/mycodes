@@ -42,7 +42,9 @@ public class SeamCarver {
 
         int maxDim = Math.max(imageHeight, imageWidth);
         edgeTo = new int[maxDim][maxDim];
-        distTo = new double[maxDim][maxDim];
+
+        // Space optimization: we only need to keep track of two rows of distTo at a time
+        distTo = new double[2][maxDim];
     }
 
     // current picture
@@ -217,30 +219,39 @@ public class SeamCarver {
         setImageColumnsToOrientation(orientation);
         initDistTo();
 
+        double[] currentDistTo = distTo[1];
+        double[] lastDistTo = distTo[0];
+
         // First row
         int row = 0, col;
-        for (col = 0; col < imageWidth; col++) {
-            distTo[row][col] = imageEnergy(col, row);
+        for (col = 1; col < imageWidth - 1; col++) {
+            currentDistTo[col] = imageEnergy(col, row);
         }
 
         // Other rows
         for (row = 1; row < imageHeight; row++) {
-            // First and last columns ineligible
+            double[] temp = lastDistTo;
+            lastDistTo = currentDistTo;
+            currentDistTo = temp;
+
+
+            // First and last columns ineligible; for imageWidth==1 the default
+            // value of 0 in edgeTo is sufficient for creating a seam later.
             for (col = 1; col < imageWidth - 1; col++) {
                 // Consider (row-1,col-1),(row-1,col),(row-1,col+1)
                 // and set distTo to the minimum energy path plus
                 // this node's energy.
                 double minValue = Double.MAX_VALUE;
-                int minIndex = -1;
+                int minIndex = col-1;
 
                 for (int idx = col-1; idx <= col+1; idx++) {
-                    if (distTo[row-1][idx] < minValue) {
-                        minValue = distTo[row-1][idx];
+                    if (lastDistTo[idx] < minValue) {
+                        minValue = lastDistTo[idx];
                         minIndex = idx;
                     }
                 }
 
-                distTo[row][col] = minValue + imageEnergy(col, row);
+                currentDistTo[col] = minValue + imageEnergy(col, row);
                 edgeTo[row][col] = minIndex;
             }
         }
@@ -248,7 +259,7 @@ public class SeamCarver {
         int[] seamColIndices = new int[imageHeight];
         int lastRow = imageHeight - 1;
 
-        seamColIndices[lastRow] = getIndexOfMin(distTo[lastRow], imageWidth);
+        seamColIndices[lastRow] = getIndexOfMin(currentDistTo, imageWidth);
         for (row = lastRow-1; row >= 0; row--) {
             seamColIndices[row] = edgeTo[row+1][seamColIndices[row+1]];
         }
@@ -312,7 +323,7 @@ public class SeamCarver {
     }
 
     private int getIndexOfMin(double[] d, int length) {
-        int minIndex = -1;
+        int minIndex = 0;
         double min = Double.MAX_VALUE;
         for (int i = 0; i < length; i++) {
             if (d[i] < min) {
@@ -325,9 +336,10 @@ public class SeamCarver {
     }
 
     public static void main(String[] args) {
-        // Picture picture = new Picture(10, 10);
-        // SeamCarver seamCarver = new SeamCarver(picture);
+        Picture picture = new Picture(8,1);
 
+        SeamCarver seamCarver = new SeamCarver(picture);
+        seamCarver.findHorizontalSeam();
         // Test illegal argument exception behavior
         // int[] seam = { -1, 0, 1, 2, 3, 3, 3, 3, 3, 3 };
         // seamCarver.removeVerticalSeam(seam);
