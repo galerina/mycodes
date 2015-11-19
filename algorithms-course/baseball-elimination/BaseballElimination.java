@@ -11,6 +11,7 @@ public class BaseballElimination {
     private final String[] teams;
     private final int[] remaining;
     private final int[] wins;
+    private final int[] losses;
     private final int[][] games;
     private boolean isEliminated;
     private ArrayList<String> certificateOfElimination;
@@ -24,19 +25,18 @@ public class BaseballElimination {
         teams = new String[numberOfTeams];
         remaining = new int[numberOfTeams];
         wins = new int[numberOfTeams];
+        losses = new int[numberOfTeams];
         games = new int[numberOfTeams][numberOfTeams];
 
         for (int i = 0; i < numberOfTeams; i++) {
-            line = in.readLine();
-            String[] parts = line.split(" +");
-            teams[i] = parts[0];
-            wins[i] = Integer.parseInt(parts[1]);
-            Integer.parseInt(parts[2]); // losses is unused
-            remaining[i] = Integer.parseInt(parts[3]);
+            teams[i] = in.readString();
+            wins[i] = in.readInt();
+            losses[i] = in.readInt();
+            remaining[i] = in.readInt();
 
             // StdOut.printf("Team: %s, Wins: %d, Losses: %d, Remaining: %d\n", teamName, wins, losses, remainingGames);
             for (int j = 0; j < numberOfTeams; j++) {
-                games[i][j] = Integer.parseInt(parts[4+j]);
+                games[i][j] = in.readInt();
             }
         }
     }
@@ -55,6 +55,12 @@ public class BaseballElimination {
     public int wins(String team) {
         int id = getTeamID(team);
         return wins[id];
+    }
+
+    // number of losses for a given team
+    public int losses(String team) {
+        int id = getTeamID(team);
+        return losses[id];
     }
     
     // number of remaining games for given team
@@ -159,12 +165,12 @@ public class BaseballElimination {
 
     private int getTeamID(String name) {
         for (int i = 0; i < teams.length; i++) {
-            if (teams[i] == name) {
+            if (teams[i].equals(name)) {
                 return i;
             }
         }
 
-        return -1;
+        throw new IllegalArgumentException();
     }
 
     public static void main(String[] args) {
@@ -173,7 +179,7 @@ public class BaseballElimination {
             StdOut.printf("Team: %s, wins: %d, remaining: %d, games:\n", team, division.wins(team),
                           division.remaining(team));
             for (String opponent : division.teams()) {
-                if (team != opponent) {
+                if (!team.equals(opponent)) {
                     StdOut.printf("  against %s: %d\n", opponent, division.against(team, opponent));
                 }
             }
