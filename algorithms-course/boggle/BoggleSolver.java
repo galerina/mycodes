@@ -1,19 +1,18 @@
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdOut;
-// import edu.princeton.cs.algs4.TST;
 
 import java.util.HashSet;
 import java.util.BitSet;
 
 public class BoggleSolver {
-    private final TST<Boolean> dictionary;
+    private final TST dictionary;
 
     // Initializes the data structure using the given array of strings as the dictionary.
     // (You can assume each word in the dictionary contains only the uppercase letters A through Z.)
     public BoggleSolver(String[] dictionary) {
-        this.dictionary = new TST<Boolean>();
+        this.dictionary = new TST();
         for (String s : dictionary) {
-            this.dictionary.put(s, true);
+            this.dictionary.put(s);
         }
     }
 
@@ -24,7 +23,7 @@ public class BoggleSolver {
         HashSet<String> words = new HashSet<String>();
         for (int i = 0; i < board.rows(); i++) {
             for (int j = 0; j < board.cols(); j++) {
-                getWordsHelper(board, new BitSet(), words, "", i, j);
+                getWordsHelper(board, dictionary.iterator(), new BitSet(), words, i, j);
             }
         }
 
@@ -32,31 +31,30 @@ public class BoggleSolver {
     }
 
 
-    private String getLetter(BoggleBoard board, int row, int col) {
+
+    private void getWordsHelper(BoggleBoard board, DictionaryIterator tstIter, BitSet marked, HashSet<String> words, int row, int col) {
+        marked.set(row * board.cols() + col);
+        // char letter = getLetter(board, row, col);
         char letter = board.getLetter(row, col);
         if (letter == 'Q') {
-            return "QU";
+            tstIter.advance('Q');
+            tstIter.advance('U');
         } else {
-            return Character.toString(letter);
-        }
-    }
-
-
-    private void getWordsHelper(BoggleBoard board, BitSet marked, HashSet<String> words, String prefix, int row, int col) {
-        marked.set(row * board.cols() + col);
-        String newPrefix = prefix + getLetter(board, row, col);
-        if (newPrefix.length() >= 3 && dictionary.contains(newPrefix)) {
-            words.add(newPrefix);
+            tstIter.advance(letter);
         }
 
-        if (newPrefix.length() <= 2 || dictionary.containsPrefix(newPrefix)) {
+        if (tstIter.getString().length() >= 3 && tstIter.isWord()) {
+            words.add(tstIter.getString());
+        }
+
+        if (tstIter.isPrefix()) {
             for (int i = -1; i <= 1; i++) {
                 for (int j = -1; j <= 1; j++) {
                     int newRow = row + i;
                     int newCol = col + j;
                     if (0 <= newRow && newRow < board.rows() && 
                         0 <= newCol && newCol < board.cols() && !marked.get(newRow * board.cols() + newCol)) {
-                        getWordsHelper(board, (BitSet) marked.clone(), words, newPrefix, newRow, newCol);
+                        getWordsHelper(board, dictionary.iteratorClone(tstIter), (BitSet) marked.clone(), words, newRow, newCol);
                     }
                 }
             }
@@ -102,15 +100,17 @@ public class BoggleSolver {
         }
         StdOut.println("Score = " + score);
 
-        long startTime = System.nanoTime();
-        int T = 50;
-        int M = 4;
-        int N = 4;
-        for (int i = 0; i < T; i++) {
-            BoggleBoard b = new BoggleBoard(M, N);
-            Iterable<String> iter = solver.getAllValidWords(board);
+        if (true) {
+            long startTime = System.nanoTime();
+            int T = 150;
+            int M = 4;
+            int N = 4;
+            for (int i = 0; i < T; i++) {
+                BoggleBoard b = new BoggleBoard(M, N);
+                Iterable<String> iter = solver.getAllValidWords(board);
+            }
+            long endTime = System.nanoTime();
+            StdOut.printf("%g ms per solve, %dx%d board\n", (endTime - startTime) * 1.0 / (1000000*T), M, N);
         }
-        long endTime = System.nanoTime();
-        StdOut.printf("%g ms per solve, %dx%d board\n", (endTime - startTime) * 1.0 / (1000000*T), M, N);
     }
 }

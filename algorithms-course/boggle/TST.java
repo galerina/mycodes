@@ -38,6 +38,7 @@
  ******************************************************************************/
 
 import edu.princeton.cs.algs4.Queue;
+import edu.princeton.cs.algs4.StdOut;
 
 /**
  *  The <tt>TST</tt> class represents an symbol table of key-value
@@ -61,14 +62,58 @@ import edu.princeton.cs.algs4.Queue;
  *  For additional documentation, see <a href="http://algs4.cs.princeton.edu/52trie">Section 5.2</a> of
  *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
  */
-public class TST<Value> {
+public class TST {
     private int N;              // size
-    private Node<Value> root;   // root of TST
+    private Node root;          // root of TST
 
-    private static class Node<Value> {
+    private static class Node {
         private char c;                        // character
-        private Node<Value> left, mid, right;  // left, middle, and right subtries
-        private Value val;                     // value associated with string
+        private Node left, mid, right;  // left, middle, and right subtries
+        private boolean isWord;
+    }
+
+    private class TSTIterator implements DictionaryIterator {
+        private Node current;
+        private String currentString = "";
+
+        public boolean advance(char c) {
+            if (current == null) {
+                return false;
+            }
+
+            if (currentString != "") {
+                current = current.mid;
+            }
+
+            currentString += c;
+            while (current != null) {
+                if (c < current.c) {
+                    current = current.left;
+                } else if (c > current.c) {
+                    current = current.right;
+                } else {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public boolean isWord() {
+            if (current == null) {
+                return false;
+            } else {
+                return current.isWord;
+            }
+        }
+
+        public boolean isPrefix() {
+            return (current != null);
+        }
+
+        public String getString() {
+            return currentString;
+        }
     }
 
     /**
@@ -85,6 +130,19 @@ public class TST<Value> {
         return N;
     }
 
+    public DictionaryIterator iterator() {
+        TSTIterator iter = new TSTIterator();
+        iter.current = root;
+        return iter;
+    }
+
+    public DictionaryIterator iteratorClone(DictionaryIterator iter) {
+        TSTIterator newIter = new TSTIterator();
+        newIter.current = ((TSTIterator) iter).current;
+        newIter.currentString = ((TSTIterator) iter).currentString;
+        return newIter;
+    }
+
     /**
      * Does this symbol table contain the given key?
      * @param key the key
@@ -92,36 +150,41 @@ public class TST<Value> {
      *     <tt>false</tt> otherwise
      * @throws NullPointerException if <tt>key</tt> is <tt>null</tt>
      */
+
     public boolean contains(String key) {
-        return get(key) != null;
-    }
-
-    /**
-     * Returns the value associated with the given key.
-     * @param key the key
-     * @return the value associated with the given key if the key is in the symbol table
-     *     and <tt>null</tt> if the key is not in the symbol table
-     * @throws NullPointerException if <tt>key</tt> is <tt>null</tt>
-     */
-    public Value get(String key) {
         if (key == null) throw new NullPointerException();
         if (key.length() == 0) throw new IllegalArgumentException("key must have length >= 1");
-        Node<Value> x = get(root, key, 0);
-        if (x == null) return null;
-        return x.val;
+        Node x = getSubtrie(key);
+        if (x == null) return false;
+        return x.isWord;
     }
 
-    // return subtrie corresponding to given key
-    private Node<Value> get(Node<Value> x, String key, int d) {
+
+
+    private Node getSubtrie(String key) {
         if (key == null) throw new NullPointerException();
         if (key.length() == 0) throw new IllegalArgumentException("key must have length >= 1");
-        if (x == null) return null;
-        char c = key.charAt(d);
-        if      (c < x.c)              return get(x.left,  key, d);
-        else if (c > x.c)              return get(x.right, key, d);
-        else if (d < key.length() - 1) return get(x.mid,   key, d+1);
-        else                           return x;
+
+        int d = 0;
+        Node currentNode = root;
+        while (true) {
+            if (currentNode == null) {
+                return null;
+            }
+            char c = key.charAt(d);
+            if (c < currentNode.c) {
+                currentNode = currentNode.left;
+            } else if (c > currentNode.c) {
+                currentNode = currentNode.right;
+            } else if (d < key.length() - 1) {
+                currentNode = currentNode.mid;
+                d++;
+            } else {
+                return currentNode;
+            }
+        }
     }
+
 
     /**
      * Inserts the key-value pair into the symbol table, overwriting the old value
@@ -131,119 +194,30 @@ public class TST<Value> {
      * @param val the value
      * @throws NullPointerException if <tt>key</tt> is <tt>null</tt>
      */
-    public void put(String key, Value val) {
+    public void put(String key) {
         if (!contains(key)) N++;
-        root = put(root, key, val, 0);
+        root = put(root, key, 0);
     }
 
-    private Node<Value> put(Node<Value> x, String key, Value val, int d) {
+    private Node put(Node x, String key, int d) {
         char c = key.charAt(d);
         if (x == null) {
-            x = new Node<Value>();
+            x = new Node();
             x.c = c;
+            x.isWord = false;
         }
-        if      (c < x.c)               x.left  = put(x.left,  key, val, d);
-        else if (c > x.c)               x.right = put(x.right, key, val, d);
-        else if (d < key.length() - 1)  x.mid   = put(x.mid,   key, val, d+1);
-        else                            x.val   = val;
+        if      (c < x.c)               x.left  = put(x.left,  key, d);
+        else if (c > x.c)               x.right = put(x.right, key, d);
+        else if (d < key.length() - 1)  x.mid   = put(x.mid,   key, d+1);
+        else                            x.isWord   = true;
         return x;
     }
-
-    /**
-     * Returns the string in the symbol table that is the longest prefix of <tt>query</tt>,
-     * or <tt>null</tt>, if no such string.
-     * @param query the query string
-     * @return the string in the symbol table that is the longest prefix of <tt>query</tt>,
-     *     or <tt>null</tt> if no such string
-     * @throws NullPointerException if <tt>query</tt> is <tt>null</tt>
-     */
-    public String longestPrefixOf(String query) {
-        if (query == null || query.length() == 0) return null;
-        int length = 0;
-        Node<Value> x = root;
-        int i = 0;
-        while (x != null && i < query.length()) {
-            char c = query.charAt(i);
-            if      (c < x.c) x = x.left;
-            else if (c > x.c) x = x.right;
-            else {
-                i++;
-                if (x.val != null) length = i;
-                x = x.mid;
-            }
-        }
-        return query.substring(0, length);
-    }
-
-    /**
-     * Returns all keys in the symbol table as an <tt>Iterable</tt>.
-     * To iterate over all of the keys in the symbol table named <tt>st</tt>,
-     * use the foreach notation: <tt>for (Key key : st.keys())</tt>.
-     * @return all keys in the sybol table as an <tt>Iterable</tt>
-     */
-    public Iterable<String> keys() {
-        Queue<String> queue = new Queue<String>();
-        collect(root, new StringBuilder(), queue);
-        return queue;
-    }
-
+    /*
     public boolean containsPrefix(String prefix) {
-        Node<Value> x = get(root, prefix, 0);
+        Node x = getSubtrie(prefix);
         return (x != null);
     }
-
-    /**
-     * Returns all of the keys in the set that start with <tt>prefix</tt>.
-     * @param prefix the prefix
-     * @return all of the keys in the set that start with <tt>prefix</tt>,
-     *     as an iterable
-     */
-    public Iterable<String> keysWithPrefix(String prefix) {
-        Queue<String> queue = new Queue<String>();
-        Node<Value> x = get(root, prefix, 0);
-        if (x == null) return queue;
-        if (x.val != null) queue.enqueue(prefix);
-        collect(x.mid, new StringBuilder(prefix), queue);
-        return queue;
-    }
-
-    // all keys in subtrie rooted at x with given prefix
-    private void collect(Node<Value> x, StringBuilder prefix, Queue<String> queue) {
-        if (x == null) return;
-        collect(x.left,  prefix, queue);
-        if (x.val != null) queue.enqueue(prefix.toString() + x.c);
-        collect(x.mid,   prefix.append(x.c), queue);
-        prefix.deleteCharAt(prefix.length() - 1);
-        collect(x.right, prefix, queue);
-    }
-
-
-    /**
-     * Returns all of the keys in the symbol table that match <tt>pattern</tt>,
-     * where . symbol is treated as a wildcard character.
-     * @param pattern the pattern
-     * @return all of the keys in the symbol table that match <tt>pattern</tt>,
-     *     as an iterable, where . is treated as a wildcard character.
-     */
-    public Iterable<String> keysThatMatch(String pattern) {
-        Queue<String> queue = new Queue<String>();
-        collect(root, new StringBuilder(), 0, pattern, queue);
-        return queue;
-    }
- 
-    private void collect(Node<Value> x, StringBuilder prefix, int i, String pattern, Queue<String> queue) {
-        if (x == null) return;
-        char c = pattern.charAt(i);
-        if (c == '.' || c < x.c) collect(x.left, prefix, i, pattern, queue);
-        if (c == '.' || c == x.c) {
-            if (i == pattern.length() - 1 && x.val != null) queue.enqueue(prefix.toString() + x.c);
-            if (i < pattern.length() - 1) {
-                collect(x.mid, prefix.append(x.c), i+1, pattern, queue);
-                prefix.deleteCharAt(prefix.length() - 1);
-            }
-        }
-        if (c == '.' || c > x.c) collect(x.right, prefix, i, pattern, queue);
-    }
+    */
 }
 
 /******************************************************************************
