@@ -2,7 +2,7 @@ import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdOut;
 // import edu.princeton.cs.algs4.TST;
 
-import java.util.TreeSet;
+import java.util.HashSet;
 import java.util.BitSet;
 
 public class BoggleSolver {
@@ -21,7 +21,7 @@ public class BoggleSolver {
     public Iterable<String> getAllValidWords(BoggleBoard board) {
         // For each board position, sprawl out along each possible path, adding words that
         // are in the dictionary and ending when the prefix is not contained in the dictionary.
-        TreeSet<String> words = new TreeSet<String>();
+        HashSet<String> words = new HashSet<String>();
         for (int i = 0; i < board.rows(); i++) {
             for (int j = 0; j < board.cols(); j++) {
                 getWordsHelper(board, new BitSet(), words, "", i, j);
@@ -42,7 +42,7 @@ public class BoggleSolver {
     }
 
 
-    private void getWordsHelper(BoggleBoard board, BitSet marked, TreeSet<String> words, String prefix, int row, int col) {
+    private void getWordsHelper(BoggleBoard board, BitSet marked, HashSet<String> words, String prefix, int row, int col) {
         marked.set(row * board.cols() + col);
         String newPrefix = prefix + getLetter(board, row, col);
         if (newPrefix.length() >= 3 && dictionary.contains(newPrefix)) {

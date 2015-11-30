@@ -3,6 +3,8 @@
  *  Execution:    java TST < words.txt
  *  Dependencies: StdIn.java
  *
+ *  This is a copy of the algs4 TST file which contains a new method,
+ *  containsPrefix(String s), which allows prefix queries on the tree.
  *  Symbol table with string keys, implemented using a ternary search
  *  trie (TST).
  *
