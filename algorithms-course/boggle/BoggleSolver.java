@@ -4,6 +4,17 @@ import edu.princeton.cs.algs4.StdOut;
 import java.util.HashSet;
 import java.util.BitSet;
 
+// This class is initialized with a dictionary of valid strings and can then be used
+// to solve BoggleBoards for all possible words. Internally it uses a ternary search
+// tree for word lookups.
+// I implemented several optimizations to improve performance (and satisfy the algs4 autograder):
+// 1) Define custom TST that allows querying whether a prefix is present in the tree
+// 2) Implement an iterator for the TST that allows us to keep track of the depth-first
+//    search position in the tree at the same time as we are DFS'ing in the boggle board.
+//    This eliminates a lot of repetitive work in tracing through redundant prefixes in
+//    the TST.
+// 3) use array for the first two (or three?) levels of the TST to speed up queries.
+// 4) TODO-maybe: use iterative algorithm for board search
 public class BoggleSolver {
     private final TST dictionary;
 
@@ -12,9 +23,12 @@ public class BoggleSolver {
     public BoggleSolver(String[] dictionary) {
         this.dictionary = new TST();
         for (String s : dictionary) {
-            this.dictionary.put(s);
+            if (s.length() >= 3) {
+                this.dictionary.put(s);
+            }
         }
     }
+
 
     // Returns the set of all valid words in the given Boggle board, as an Iterable.
     public Iterable<String> getAllValidWords(BoggleBoard board) {
@@ -31,10 +45,8 @@ public class BoggleSolver {
     }
 
 
-
     private void getWordsHelper(BoggleBoard board, DictionaryIterator tstIter, BitSet marked, HashSet<String> words, int row, int col) {
         marked.set(row * board.cols() + col);
-        // char letter = getLetter(board, row, col);
         char letter = board.getLetter(row, col);
         if (letter == 'Q') {
             tstIter.advance('Q');
@@ -43,7 +55,7 @@ public class BoggleSolver {
             tstIter.advance(letter);
         }
 
-        if (tstIter.getString().length() >= 3 && tstIter.isWord()) {
+        if (tstIter.isWord()) {
             words.add(tstIter.getString());
         }
 
@@ -61,9 +73,6 @@ public class BoggleSolver {
         }
     }
 
-    private boolean isValidWord(String string) {
-        return (string.length() >= 3 && dictionary.contains(string));
-    }
 
     // Returns the score of the given word if it is in the dictionary, zero otherwise.
     // (You can assume the word contains only the uppercase letters A through Z.)
@@ -86,6 +95,7 @@ public class BoggleSolver {
             return 11;
         }
     }
+
 
     public static void main(String[] args) {
         In in = new In(args[0]);

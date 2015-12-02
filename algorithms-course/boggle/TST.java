@@ -3,68 +3,25 @@
  *  Execution:    java TST < words.txt
  *  Dependencies: StdIn.java
  *
- *  This is a copy of the algs4 TST file which contains a new method,
- *  containsPrefix(String s), which allows prefix queries on the tree.
- *  Symbol table with string keys, implemented using a ternary search
- *  trie (TST).
- *
- *
- *  % java TST < shellsST.txt
- *  keys(""):
- *  by 4
- *  sea 6
- *  sells 1
- *  she 0
- *  shells 3
- *  shore 7
- *  the 5
- *
- *  longestPrefixOf("shellsort"):
- *  shells
- *
- *  keysWithPrefix("shor"):
- *  shore
- *
- *  keysThatMatch(".he.l."):
- *  shells
- *
- *  % java TST
- *  theory the now is the time for all good men
- *
- *  Remarks
- *  --------
- *    - can't use a key that is the empty string ""
+ *  This is a modified version of the TST class found at:
+ *    http://algs4.cs.princeton.edu/code/edu/princeton/cs/algs4/TST.java.html
+ *  Since I used this class as a dictionary for a Boggle solver, I added some
+ *  optimizations that speed up this use case:
+ *   -Use R*R-way trie style lookup for the first two characters in a string
+ *   -Implement an iterator so that the DFS-state in the Boggle board can be
+ *    stored rather than repeating the first part of the string lookup many
+ *    times.
  *
  ******************************************************************************/
 
 import edu.princeton.cs.algs4.Queue;
 import edu.princeton.cs.algs4.StdOut;
 
-/**
- *  The <tt>TST</tt> class represents an symbol table of key-value
- *  pairs, with string keys and generic values.
- *  It supports the usual <em>put</em>, <em>get</em>, <em>contains</em>,
- *  <em>delete</em>, <em>size</em>, and <em>is-empty</em> methods.
- *  It also provides character-based methods for finding the string
- *  in the symbol table that is the <em>longest prefix</em> of a given prefix,
- *  finding all strings in the symbol table that <em>start with</em> a given prefix,
- *  and finding all strings in the symbol table that <em>match</em> a given pattern.
- *  A symbol table implements the <em>associative array</em> abstraction:
- *  when associating a value with a key that is already in the symbol table,
- *  the convention is to replace the old value with the new value.
- *  Unlike {@link java.util.Map}, this class uses the convention that
- *  values cannot be <tt>null</tt>&mdash;setting the
- *  value associated with a key to <tt>null</tt> is equivalent to deleting the key
- *  from the symbol table.
- *  <p>
- *  This implementation uses a ternary search trie.
- *  <p>
- *  For additional documentation, see <a href="http://algs4.cs.princeton.edu/52trie">Section 5.2</a> of
- *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
- */
 public class TST {
     private int N;              // size
-    private Node root;          // root of TST
+    private Node[] root;        // root of TST
+
+    private static final int ALPHABET_SIZE = 'Z' - 'A' + 1;
 
     private static class Node {
         private char c;                        // character
@@ -73,19 +30,27 @@ public class TST {
     }
 
     private class TSTIterator implements DictionaryIterator {
+        // It feels dirty that we have to store the root of the tree in the
+        // iterator but this is a consequence of using R-way lookup for the
+        // first characters.
+        private Node[] root;
         private Node current;
         private String currentString = "";
 
         public boolean advance(char c) {
+            currentString += c;
+            if (currentString.length() == 1) {
+                return true;
+            } else if (currentString.length() == 2) {
+                current = root[TST.getRootIndex(currentString)];
+                return (current == null) ? false : true;
+            }
+
             if (current == null) {
                 return false;
             }
 
-            if (currentString != "") {
-                current = current.mid;
-            }
-
-            currentString += c;
+            current = current.mid;
             while (current != null) {
                 if (c < current.c) {
                     current = current.left;
@@ -100,15 +65,12 @@ public class TST {
         }
 
         public boolean isWord() {
-            if (current == null) {
-                return false;
-            } else {
-                return current.isWord;
-            }
+            return (current != null && current.isWord);
         }
 
         public boolean isPrefix() {
-            return (current != null);
+            return (currentString.length() <= 1 || 
+                    (current != null && current.mid != null));
         }
 
         public String getString() {
@@ -120,6 +82,7 @@ public class TST {
      * Initializes an empty string symbol table.
      */
     public TST() {
+        root = new Node[ALPHABET_SIZE*ALPHABET_SIZE];
     }
 
     /**
@@ -132,14 +95,17 @@ public class TST {
 
     public DictionaryIterator iterator() {
         TSTIterator iter = new TSTIterator();
-        iter.current = root;
+        iter.current = null;
+        iter.root = root;
         return iter;
     }
 
     public DictionaryIterator iteratorClone(DictionaryIterator iter) {
         TSTIterator newIter = new TSTIterator();
-        newIter.current = ((TSTIterator) iter).current;
-        newIter.currentString = ((TSTIterator) iter).currentString;
+        TSTIterator oldIter = (TSTIterator) iter;
+        newIter.root = oldIter.root;
+        newIter.current = oldIter.current;
+        newIter.currentString = oldIter.currentString;
         return newIter;
     }
 
@@ -150,7 +116,6 @@ public class TST {
      *     <tt>false</tt> otherwise
      * @throws NullPointerException if <tt>key</tt> is <tt>null</tt>
      */
-
     public boolean contains(String key) {
         if (key == null) throw new NullPointerException();
         if (key.length() == 0) throw new IllegalArgumentException("key must have length >= 1");
@@ -160,17 +125,26 @@ public class TST {
     }
 
 
-
+    /**
+     * Returns the subtree for the parameter key, null if this tree is not a word or prefix
+     */
     private Node getSubtrie(String key) {
         if (key == null) throw new NullPointerException();
         if (key.length() == 0) throw new IllegalArgumentException("key must have length >= 1");
 
-        int d = 0;
-        Node currentNode = root;
+        Node currentNode = root[getRootIndex(key)];
+        if (currentNode == null) {
+            return null;
+        } else {
+            currentNode = currentNode.mid;
+        }
+
+        int d = 2;
         while (true) {
             if (currentNode == null) {
                 return null;
             }
+
             char c = key.charAt(d);
             if (c < currentNode.c) {
                 currentNode = currentNode.left;
@@ -187,16 +161,16 @@ public class TST {
 
 
     /**
-     * Inserts the key-value pair into the symbol table, overwriting the old value
-     * with the new value if the key is already in the symbol table.
-     * If the value is <tt>null</tt>, this effectively deletes the key from the symbol table.
+     * Inserts the key into the symbol table
      * @param key the key
-     * @param val the value
      * @throws NullPointerException if <tt>key</tt> is <tt>null</tt>
      */
     public void put(String key) {
         if (!contains(key)) N++;
-        root = put(root, key, 0);
+
+        char c = key.charAt(0);
+        Node x = root[getRootIndex(key)];
+        root[getRootIndex(key)] = put(x, key, 1);
     }
 
     private Node put(Node x, String key, int d) {
@@ -206,18 +180,24 @@ public class TST {
             x.c = c;
             x.isWord = false;
         }
-        if      (c < x.c)               x.left  = put(x.left,  key, d);
-        else if (c > x.c)               x.right = put(x.right, key, d);
-        else if (d < key.length() - 1)  x.mid   = put(x.mid,   key, d+1);
-        else                            x.isWord   = true;
+        if (c < x.c) {
+            x.left  = put(x.left,  key, d);
+        } else if (c > x.c) {
+            x.right = put(x.right, key, d);
+        } else if (d < key.length() - 1) {
+            x.mid   = put(x.mid,   key, d+1);
+        } else {
+            x.isWord   = true;
+        }
         return x;
     }
-    /*
-    public boolean containsPrefix(String prefix) {
-        Node x = getSubtrie(prefix);
-        return (x != null);
+
+    /**
+     * Return the index into the root array for the parameter key
+     */
+    private static int getRootIndex(String key) {
+        return ((key.charAt(0) - 'A') * ALPHABET_SIZE) + (key.charAt(1) - 'A');
     }
-    */
 }
 
 /******************************************************************************
