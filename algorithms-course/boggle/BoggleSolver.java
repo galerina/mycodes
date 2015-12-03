@@ -14,7 +14,8 @@ import java.util.BitSet;
 //    This eliminates a lot of repetitive work in tracing through redundant prefixes in
 //    the TST.
 // 3) use array for the first two (or three?) levels of the TST to speed up queries.
-// 4) TODO-maybe: use iterative algorithm for board search
+// 
+// **Consider using iterative algorithm for board search
 public class BoggleSolver {
     private final TST dictionary;
 
@@ -45,7 +46,8 @@ public class BoggleSolver {
     }
 
 
-    private void getWordsHelper(BoggleBoard board, DictionaryIterator tstIter, BitSet marked, HashSet<String> words, int row, int col) {
+    private void getWordsHelper(BoggleBoard board, DictionaryIterator tstIter, BitSet marked, 
+                                HashSet<String> words, int row, int col) {
         marked.set(row * board.cols() + col);
         char letter = board.getLetter(row, col);
         if (letter == 'Q') {
@@ -66,7 +68,8 @@ public class BoggleSolver {
                     int newCol = col + j;
                     if (0 <= newRow && newRow < board.rows() && 
                         0 <= newCol && newCol < board.cols() && !marked.get(newRow * board.cols() + newCol)) {
-                        getWordsHelper(board, dictionary.iteratorClone(tstIter), (BitSet) marked.clone(), words, newRow, newCol);
+                        getWordsHelper(board, dictionary.iteratorClone(tstIter), 
+                                       (BitSet) marked.clone(), words, newRow, newCol);
                     }
                 }
             }
@@ -77,11 +80,7 @@ public class BoggleSolver {
     // Returns the score of the given word if it is in the dictionary, zero otherwise.
     // (You can assume the word contains only the uppercase letters A through Z.)
     public int scoreOf(String word) {
-        if (!dictionary.contains(word)) {
-            return 0;
-        }
-
-        if (word.length() <= 2) {
+        if (word.length() <= 2 || !dictionary.contains(word)) {
             return 0;
         } else if (word.length() <= 4) {
             return 1;
