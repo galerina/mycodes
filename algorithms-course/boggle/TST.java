@@ -14,14 +14,15 @@
  *
  ******************************************************************************/
 
-import edu.princeton.cs.algs4.Queue;
-import edu.princeton.cs.algs4.StdOut;
+// import edu.princeton.cs.algs4.Queue;
+// import edu.princeton.cs.algs4.StdOut;
 
 public class TST {
-    private int N;              // size
-    private Node[] root;        // root of TST
+    private static final int ALPHABET_SIZE = 'Z' - 'A' + 2;
+    private static final int WILDCARD_VALUE = ALPHABET_SIZE - 1;
 
-    private static final int ALPHABET_SIZE = 'Z' - 'A' + 1;
+    private int N;              // size
+    private Node[][][] root;        // root of TST
 
     private static class Node {
         private char c;                        // character
@@ -33,16 +34,16 @@ public class TST {
         // It feels dirty that we have to store the root of the tree in the
         // iterator but this is a consequence of using R-way lookup for the
         // first characters.
-        private Node[] root;
+        private Node[][][] root;
         private Node current;
         private String currentString = "";
 
         public boolean advance(char c) {
             currentString += c;
-            if (currentString.length() == 1) {
+            if (currentString.length() == 1 || currentString.length() == 2) {
                 return true;
-            } else if (currentString.length() == 2) {
-                current = root[TST.getRootIndex(currentString)];
+            } else if (currentString.length() == 3) {
+                current = root[getIndex(currentString.charAt(0))][getIndex(currentString.charAt(1))][getIndex(currentString.charAt(2))];
                 return (current == null) ? false : true;
             }
 
@@ -69,8 +70,13 @@ public class TST {
         }
 
         public boolean isPrefix() {
-            return (currentString.length() <= 1 || 
-                    (current != null && current.mid != null));
+            if (currentString.length() < 2) {
+                return true;
+            } else if (currentString.length() == 2) {
+                return (root[getIndex(currentString.charAt(0))][getIndex(currentString.charAt(1))][WILDCARD_VALUE] != null);
+            } else {
+                return (current != null && current.mid != null);
+            }
         }
 
         public String getString() {
@@ -82,7 +88,7 @@ public class TST {
      * Initializes an empty string symbol table.
      */
     public TST() {
-        root = new Node[ALPHABET_SIZE*ALPHABET_SIZE];
+        root = new Node[ALPHABET_SIZE][ALPHABET_SIZE][ALPHABET_SIZE];
     }
 
     /**
@@ -118,7 +124,7 @@ public class TST {
      */
     public boolean contains(String key) {
         if (key == null) throw new NullPointerException();
-        if (key.length() == 0) throw new IllegalArgumentException("key must have length >= 1");
+        if (key.length() < 3) throw new IllegalArgumentException("key must have length >= 3");
         Node x = getSubtrie(key);
         if (x == null) return false;
         return x.isWord;
@@ -130,16 +136,18 @@ public class TST {
      */
     private Node getSubtrie(String key) {
         if (key == null) throw new NullPointerException();
-        if (key.length() == 0) throw new IllegalArgumentException("key must have length >= 1");
+        if (key.length() < 3) throw new IllegalArgumentException("key must have length >= 3");
 
-        Node currentNode = root[getRootIndex(key)];
+        Node currentNode = getRootNode(key);
         if (currentNode == null) {
             return null;
+        } else if (key.length() == 3) {
+            return currentNode;
         } else {
             currentNode = currentNode.mid;
         }
 
-        int d = 2;
+        int d = 3;
         while (true) {
             if (currentNode == null) {
                 return null;
@@ -168,9 +176,11 @@ public class TST {
     public void put(String key) {
         if (!contains(key)) N++;
 
-        char c = key.charAt(0);
-        Node x = root[getRootIndex(key)];
-        root[getRootIndex(key)] = put(x, key, 1);
+        if (root[getIndex(key.charAt(0))][getIndex(key.charAt(1))][WILDCARD_VALUE] == null) {
+            root[getIndex(key.charAt(0))][getIndex(key.charAt(1))][WILDCARD_VALUE] = new Node();
+        }
+        Node x = getRootNode(key);
+        setRootNode(key, put(x, key, 2));
     }
 
     private Node put(Node x, String key, int d) {
@@ -192,13 +202,20 @@ public class TST {
         return x;
     }
 
-    /**
-     * Return the index into the root array for the parameter key
-     */
-    private static int getRootIndex(String key) {
-        return ((key.charAt(0) - 'A') * ALPHABET_SIZE) + (key.charAt(1) - 'A');
+    private static int getIndex(char c) {
+        return c - 'A';
+    }
+
+    private Node getRootNode(String key) {
+        return root[getIndex(key.charAt(0))][getIndex(key.charAt(1))][getIndex(key.charAt(2))];
+    }
+
+    private void setRootNode(String key, Node node) {
+        root[getIndex(key.charAt(0))][getIndex(key.charAt(1))][getIndex(key.charAt(2))] = node;
     }
 }
+
+
 
 /******************************************************************************
  *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
