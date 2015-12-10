@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Collections;
 
 import edu.princeton.cs.algs4.BinaryStdIn;
 import edu.princeton.cs.algs4.BinaryStdOut;
@@ -7,14 +9,14 @@ public class MoveToFront {
     // apply move-to-front encoding, reading from standard input and writing to standard output
     public static void encode() {
         ArrayList<Character> charSequence = new ArrayList<Character>();
-        for (int i = 0; i <= 255; i++) {
-            charSequence.add((char) i);
+        for (char i = 0; i <= 255; i++) {
+            charSequence.add(i);
         }
 
         while (!BinaryStdIn.isEmpty()) {
             char c = BinaryStdIn.readChar();
-            int index = charSequence.indexOf(c);
-            BinaryStdOut.write(index, 8);
+            char index = (char) charSequence.indexOf(c);
+            BinaryStdOut.write(index);
 
             moveCharToFront(charSequence, index, c);
         }
@@ -24,17 +26,16 @@ public class MoveToFront {
 
     // apply move-to-front decoding, reading from standard input and writing to standard output
     public static void decode() {
-        ArrayList<Character> charSequence = new ArrayList<Character>();
-        for (int i = 0; i <= 255; i++) {
-            charSequence.add((char) i);
+        LinkedList<Character> charSequence = new LinkedList<Character>();
+        for (char i = 0; i <= 255; i++) {
+            charSequence.add(i);
         }
 
         while (!BinaryStdIn.isEmpty()) {
-            int index = BinaryStdIn.readInt(8);
-            char c = charSequence.get(index);
+            char index = BinaryStdIn.readChar();
+            char c = charSequence.remove(index);
+            charSequence.addFirst(c);
             BinaryStdOut.write(c);
-
-            moveCharToFront(charSequence, index, c);
         }
 
         BinaryStdOut.flush();
