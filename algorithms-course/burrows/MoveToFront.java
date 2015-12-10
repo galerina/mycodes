@@ -2,7 +2,6 @@ import java.util.ArrayList;
 
 import edu.princeton.cs.algs4.BinaryStdIn;
 import edu.princeton.cs.algs4.BinaryStdOut;
-import edu.princeton.cs.algs4.StdOut;
 
 public class MoveToFront {
     // apply move-to-front encoding, reading from standard input and writing to standard output
@@ -15,7 +14,7 @@ public class MoveToFront {
         while (!BinaryStdIn.isEmpty()) {
             char c = BinaryStdIn.readChar();
             int index = charSequence.indexOf(c);
-            BinaryStdOut.write(index,8);
+            BinaryStdOut.write(index, 8);
 
             moveCharToFront(charSequence, index, c);
         }
