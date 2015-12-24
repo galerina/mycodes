@@ -2,11 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="85ba4123-f60a-4bc3-878d-980442941e9f" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/SuffixSort.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../code-chef/ORACLS/ORACLS.xcodeproj/project.xcworkspace/xcuserdata/andrewspencer.xcuserdatad/UserInterfaceState.xcuserstate" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../code-chef/ORACLS/ORACLS.xcodeproj/project.pbxproj" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../code-chef/ORACLS/ORACLS.xcodeproj/project.xcworkspace/contents.xcworkspacedata" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../code-chef/ORACLS/ORACLS.xcodeproj/xcuserdata/andrewspencer.xcuserdatad/xcschemes/ORACLS.xcscheme" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../code-chef/ORACLS/ORACLS.xcodeproj/xcuserdata/andrewspencer.xcuserdatad/xcschemes/xcschememanagement.plist" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../code-chef/ORACLS/ORACLS/main.cpp" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/../../japanese/wk_tolearn.py" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/BurrowsWheeler.java" afterPath="$PROJECT_DIR$/src/BurrowsWheeler.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/CircularSuffixArray.java" afterPath="$PROJECT_DIR$/src/CircularSuffixArray.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/MoveToFront.java" afterPath="$PROJECT_DIR$/src/MoveToFront.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../.gitignore" afterPath="$PROJECT_DIR$/../../.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../japanese/japanese.py" afterPath="$PROJECT_DIR$/../../japanese/japanese.py" />
@@ -140,8 +142,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="20" />
-    <option name="y" value="43" />
+    <option name="x" value="60" />
+    <option name="y" value="48" />
     <option name="width" value="1400" />
     <option name="height" value="741" />
   </component>
@@ -465,7 +467,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="20" y="43" width="1400" height="741" extended-state="0" />
+    <frame x="60" y="48" width="1400" height="741" extended-state="0" />
     <editor active="false" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />

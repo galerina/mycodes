@@ -1,3 +1,5 @@
+# coding=utf-8
+
 def ishiragana(c):
     return c >= 'ぁ' and c <= 'ん'
 

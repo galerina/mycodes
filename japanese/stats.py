@@ -30,7 +30,8 @@ data_dir="scripts"
 import os
 
 lines = []
-for filename in os.listdir(data_dir):
+for filename in ['noruwei.txt']:
+# for filename in os.listdir(data_dir):
     full_filename = os.path.join(data_dir, filename)
     print("Loading %s..."%full_filename)
     f = codecs.open(full_filename, encoding='utf-8')
@@ -56,7 +57,7 @@ for line in lines:
         if japanese.iskanji(c):
             kanji_histogram[c] += 1
 
-n = 30
+n = 2000
 word_score_dictionary = GetScoreDictionary(word_histogram)
 print("Printing %d highest scoring words:"%n)
 PrintNHighest(word_score_dictionary,n)
