@@ -14,7 +14,7 @@
 
 const ULONG DIVISOR = 1000000007;
 const int MAX_N = 100000;
-const int MAX_A = 1000000000;
+// const int MAX_A = 1000000000;
 
 ULONG powersOf2Mod[MAX_N+1];
 
@@ -31,6 +31,25 @@ ULONG getPowerOf2Mod(int exp) {
 }
 
 ULONG getScoresSum(std::vector<ULONG> & v) {
+    ULONG sum = 0;
+    int N = static_cast<int>(v.size() - 1);
+    
+    ULONG partsSubTotal = 0;
+    for (int i = 1; i <= N; i++) {
+        if (i - 1 == 0) {
+            partsSubTotal += 2 * v[i-1];
+        } else {
+            partsSubTotal += (getPowerOf2Mod(i - 1) * v[i-1]);
+        }
+        partsSubTotal %= DIVISOR;
+        sum += ((getPowerOf2Mod(N-i) * ((v[i] * partsSubTotal) % DIVISOR))) % DIVISOR;
+        sum %= DIVISOR;
+    }
+    
+    return sum;
+}
+
+ULONG getScoresSumOrig(std::vector<ULONG> & v) {
     ULONG sum = 0;
     int N = static_cast<int>(v.size() - 1);
     
@@ -70,13 +89,17 @@ int main(int argc, const char * argv[]) {
         std::cout << getScoresSum(v) << std::endl;
     }
     
-    // TEST
+    // Limits TEST
+    /*
     std::vector<ULONG> v;
-    for (int j = 0; j < MAX_N + 1; j++) {
-        int a = MAX_A;
+    for (int j = 0; j < 100000 + 1; j++) {
+        int a = MAX_A ;
         v.push_back(a);
     }
     
     std::cout << getScoresSum(v) << std::endl;
+    
+    std::cout << getScoresSumOrig(v) << std::endl;
+     */
     
 }
